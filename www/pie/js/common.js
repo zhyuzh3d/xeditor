@@ -1,0 +1,1223 @@
+/*提供通用函数和全局变量
+全局相关的设置也在这里修改
+*/
+
+if (!_cfg) var _cfg = {}; //最高全局变量，功用设置
+if (!_fns) var _fns = {}; //最高全局变量，公用函数
+if (!_xdat) var _xdat = {}; //共享变量
+if (!_pie) var _pie = {};
+
+//设置时候需要使用的biMap双向属性函数
+(function () {
+    /**
+     * 生成双向绑定的map对象，kv属性正反都有,如果k和v有重复那么将导致不希望的返回对象
+     * 仅适用于单层的简单数据keyval对
+     * @param   {Object} obj       原对象
+     * @param   {String} container 容器属性名，为了避免kv重复可以把反转的vk放到这个属性里面
+     * @returns {Object} 包含双向属性的对象
+     */
+    _fns.biMap = function (obj, container) {
+        var res = {};
+        if (container && String(container)) {
+            res[container] = {};
+        };
+
+        for (var key in obj) {
+            var val = obj[key];
+
+            res[key] = val;
+            var sval = String(val);
+            if (val && sval && sval != '') {
+                if (res[container]) {
+                    res[container][sval] = key;
+                } else {
+                    res[sval] = key;
+                }
+            };
+        };
+        return res;
+    };
+})();
+
+
+
+(function () {
+    'use strict';
+
+    //初始页面,
+    _pie.useNavBar = 'top';
+    _cfg.startPage = 'pie_welcome';
+
+    _cfg.defaultIconSm = 'http://files.jieminuoketang.com/1/aaw6vsns2i5k/src/defaultIcon128.png';
+    _cfg.defaultIconLg = 'http://rtfiles.jieminuoketang.com/1/aaw6vsns2i5k/src/defaultIcon512.png';
+    _cfg.defaultAvatarSm = 'http://files.jieminuoketang.com/1/aaw6vsns2i5k/src/defaultIcon128.png';
+    _cfg.defaultAvatarLg = 'http://rtfiles.jieminuoketang.com/1/aaw6vsns2i5k/src/defaultIcon512.png';
+
+
+    //七牛文件上传接口设定
+    _cfg.qn = {
+        getUploadTokenApi: 'http://' + window.location.host + '/api/qn_getUploadToken', //上传到随机文件名
+        getUploadTokenApi2: 'http://' + window.location.host + '/api/qn_getUploadToken2', //上传到随机文件名
+        BucketDomain: 'http://files.10knet.com/'
+    };
+
+    //自动调整上传接口
+    if (/^\w*\.jieminuoketang\.com$/.test(location.host)) {
+        _cfg.qn.BucketDomain = 'http://files.jieminuoketang.com/';
+        _cfg.qn.RtBucketDomain = 'http://rtfiles.jieminuoketang.com/';
+    };
+
+
+    //正则表达式
+    _cfg.regx = {
+        phone: /^1\d{10}$/,
+        phoneCode: /^\d{6}$/,
+        pw: /^[0-9a-zA-Z]{32}$/, //md5之后的格式
+        nick: /^[a-zA-Z\u0391-\uFFE5]+[0-9a-zA-Z\u0391-\uFFE5\.]{2,17}$/, //昵称，非数字开头3~18位
+        color: /^#[a-fA-F0-9]{6}$/, //颜色值，#开头十六进制
+        icon: /^fa-[\w-]{1,32}$/, //fa图标值
+        ukey: /^\w{8}-\w{4}-\w{4}-\w{4}-\w{12}$/, //user.ukey的格式
+        appName: /^[a-zA-Z]+[0-9a-zA-Z]{2,31}$/, //app名称格式，非数字开头3~32位
+        appAlias: /^[a-zA-Z\u0391-\uFFE5]+[0-9a-zA-Z\u0391-\uFFE5]{2,17}$/, //app别名，非数字开头3~18位
+        appDesc: /^[\s\S]{0,60}$/, //app描述，任意字符，0～60
+        wildDogAppSecret: /^[0-9a-zA-Z]{8,64}$/, //野狗APP密匙，宽泛限制
+        hash: /^[0-9a-zA-Z]{8,64}$/, //哈希字符，宽泛限制
+        fileName: /^[0-9a-zA-Z\u0391-\uFFE5]+\.(js|css|html|json|txt)$/, //文件名，中英文数字加点加2~4位字母数字
+        folderName: /^[0-9a-zA-Z\u0391-\uFFE5]{1,32}$/, //文件名，中英文数字1~32位字母数字
+    };
+
+
+    //支持打开编辑的文件类型
+    _cfg.editFileTypes = ['html', 'js', 'css', 'txt', 'json'];
+    _cfg.viewImageTypes = ['jpg', 'png', 'gif', 'jpeg'];
+
+    //全部mimetype
+    _cfg.mimeTypes = {
+        'html': 'text/html',
+        'js': 'application/javascript',
+        'css': 'text/css',
+        'txt': 'text/html',
+        'json': 'Application'
+    };
+
+
+    //默认模板图片库
+    _cfg.themeImgs = [{
+        sm: 'http://www.xmgc360.com//_imgs/smthemeimg1.png',
+    }, {
+        sm: 'http://www.xmgc360.com//_imgs/smthemeimg2.png',
+    }, {
+        sm: 'http://www.xmgc360.com//_imgs/smthemeimg8.png',
+    }, {
+        sm: 'http://www.xmgc360.com//_imgs/smthemeimg4.png',
+    }, {
+        sm: 'http://www.xmgc360.com//_imgs/smthemeimg5.png',
+    }, {
+        sm: 'http://www.xmgc360.com//_imgs/smthemeimg6.png',
+    }, {
+        sm: 'http://www.xmgc360.com//_imgs/smthemeimg7.png',
+    }]
+
+
+
+    //APP模版,根据某个模版可以由前端自由初始化app的各个文件
+    _cfg.templates = {
+        base: {
+            desc: '基本的代码派文件模版',
+            files: {
+                'index.html': 'http://www.jieminuoketang.com/pie/templates/base/index.html',
+                'index.css': 'http://www.jieminuoketang.com/pie/templates/base/index.css',
+                'index.js': 'http://www.jieminuoketang.com/pie/templates/base/index.js',
+            },
+        },
+        angular: {
+            desc: '基本的angularJs文件模版',
+            files: {
+                'index.html': 'http://www.jieminuoketang.com/pie/templates/angular/index.html',
+                'index.css': 'http://www.jieminuoketang.com/pie/templates/angular/index.css',
+                'index.js': 'http://www.jieminuoketang.com/pie/templates/angular/index.js',
+            },
+        },
+        min: {
+            desc: '最简单的web页面模版',
+            files: {
+                'index.html': 'http://www.jieminuoketang.com/pie/templates/min/index.html',
+                'index.css': 'http://www.jieminuoketang.com/pie/templates/min/index.css',
+                'index.js': 'http://www.jieminuoketang.com/pie/templates/min/index.js',
+            },
+        },
+    };
+
+    //分享页面的模版
+    _cfg.shareTemplates = {
+        achieve: {
+            id: 1,
+            url: 'http://www.jieminuoketang.com/pie/templates/share/achieve.html'
+        },
+        app: {
+            id: 2,
+            url: 'http://www.jieminuoketang.com/pie/templates/share/app.html'
+        },
+    };
+
+
+
+    //mongo数据库图式设置
+    (function forMongoose() {
+        //用户行为历史类型
+        _cfg.mgHisType = _fns.biMap({
+            unkown: 0,
+            login: 1,
+            logout: 2,
+            createApp: 3,
+            removeApp: 4,
+            updateApp: 5,
+            renameApp: 6,
+            setApp: 7,
+            setAppExt: 8,
+            shareApp: 9,
+            createFile: 10,
+            uploadFile: 11,
+            createFolder: 12,
+            favorApp: 13,
+            unFavorApp: 14,
+            addAppToLadder: 15,
+            likeApp: 16,
+            saveMyCfg: 17,
+            codeApp: 18, //保存app
+            openFile: 19,
+            removeFile: 20,
+            shareApp: 21,
+            shareAchieve: 22,
+            likeShareUrl: 23,
+        });
+
+        _cfg.mgHisTypeName = _fns.biMap({
+            '0': '未知操作',
+            '1': '登录',
+            '2': '退出',
+            '3': '创建APP',
+            '4': '移除APP',
+            '5': '更新APP',
+            '6': '重命名APP',
+            '7': '设置APP',
+            '8': '设置APP扩展信息',
+            '9': '分享APP',
+            '10': '新建文件',
+            '11': '上传文件',
+            '12': '新建文件夹',
+            '13': '收藏APP',
+            '14': '取消APP收藏',
+            '15': '将APP加入排行榜',
+            '16': '点赞APP',
+            '17': '设置编辑器偏好',
+            '18': '编辑APP',
+            '19': '打开文件',
+            '20': '删除文件',
+            '21': '分享APP',
+            '22': '分享成就',
+            '23': '为页面点赞',
+        });
+
+
+        //行为目标类型
+        _cfg.mgTarType = _fns.biMap({
+            unkown: 0,
+            user: 1,
+            app: 2,
+        });
+
+
+
+        //用户信息状态类型
+        _cfg.mgMsgState = _fns.biMap({
+            unknow: 0,
+            accept: 1,
+            reject: 2,
+        });
+
+
+        //用户分享页面的类型
+        _cfg.mgShareType = {
+            unknown: 0,
+            achieve: 1,
+            app: 2,
+        };
+
+
+    })();
+
+
+
+
+
+
+    /**
+     * 检查是否是日期格式数据
+     * @param   {object} o 被检查对象
+     * @returns {boolean}   是否
+     */
+    _fns.isDate = function (o) {
+        return {}.toString.call(o) === "[object Date]" && o.toString() !== 'Invalid Date' && !isNaN(o);
+    };
+
+
+    //获取扩展名对应的mimetype
+    _fns.getMimeByExt = function (ext) {
+        ext = ext.replace('.', '');
+        return _cfg.mimeTypes[ext];
+    };
+
+
+    //如果地址栏传递page参数进来，那么 autoStartPage 函数会覆盖startPage
+    _fns.autoStartPage = function () {
+        var pname = _fns.getUrlParam('page');
+        if (pname) {
+            _cfg.startPage = pname;
+        }
+    };
+
+    //设置相对路径，适配测试和正式
+    _cfg.home = 'http://' + window.location.host + '/pie/';
+
+    //设置获取ctrlr路径方法
+    _fns.getCtrlrUrl = function (ctrlrname, ext) {
+        if (!ext) ext = '.html';
+        if (/^http:/.test(ctrlrname)) {
+            return ctrlrname;
+        } else {
+            return _cfg.home + 'controllers/' + ctrlrname + ext;
+        }
+    };
+
+    //设置获取dialog路径方法
+    _fns.getDialogUrl = function (dialogname, ext) {
+        if (!ext) ext = '.html';
+        return _cfg.home + 'dialogs/' + dialogname + ext;
+    };
+
+    //添加控制器的js文件
+    _fns.addCtrlrJs = function (ctrlrname) {
+        var all_js = document.getElementsByTagName("script");
+        var cur_js = $(all_js[all_js.length - 1]);
+
+        var url = _cfg.home + 'controllers/' + ctrlrname + '.js';
+        cur_js.prev().append('<script src="' + url + '"><\/script>');
+    };
+
+    //添加弹窗的js文件
+    _fns.addDialogJs = function (dialogname) {
+        var all_js = document.getElementsByTagName("script");
+        var cur_js = $(all_js[all_js.length - 1]);
+
+        var url = _cfg.home + 'dialogs/' + dialogname + '.js';
+        cur_js.prev().append('<script src="' + url + '"><\/script>');
+    };
+
+
+
+    //向_xdat添加控制器，便于根据名称或Dom的id获取控制器的scope
+    _fns.initCtrlr = function (scope, element, name, solo) {
+        scope.ctrlrName = name || scope.ctrlrName;
+        scope.getCtrlrUrl = _fns.getCtrlrUrl;
+
+        //获取父层传来的参数，写入scope.xargs;
+        _fns.getCtrlrXags(scope, element);
+
+        //记录到xdat的ctrlrs，名称数组［］可以放置多个同名控制器
+        if (scope.ctrlrName) {
+            if (!_xdat.ctrlrs) _xdat.ctrlrs = {};
+            if (solo || !_xdat.ctrlrs[scope.ctrlrName]) _xdat.ctrlrs[scope.ctrlrName] = [];
+            _xdat.ctrlrs[scope.ctrlrName].push(scope);
+        };
+
+        //记录到xdat的id2ctrlr,dom的id到ctrlr的映射;id不能重名
+        if (scope.xargs.id) {
+            if (!_xdat.id2ctrlr) _xdat.id2ctrlr = {};
+            _xdat.id2ctrlr[scope.xargs.id] = scope;
+        };
+    };
+
+    /*ctrlr获取上层传来的参数，首先使用地址栏参数，其次使用xdat[ctrlr],最后使用dom的属性
+    需要具有scope.ctrlrName属性
+    写入到$scope.args
+     */
+    _fns.getCtrlrXags = function (scope, element) {
+        var res;
+        if (scope) {
+            if (!scope.xargs) scope.xargs = {};
+
+            //提取dom传来的属性参数放到scope.args
+            if (element) {
+                var hargs = element.getParentAttr();
+                for (var attr in hargs) {
+                    scope.xargs[attr] = hargs[attr];
+                };
+            };
+
+            //提取xdat的参数放到scope.args
+            var xargs = _xdat[scope.ctrlrName] || {};
+            for (var attr in xargs) {
+                scope.xargs[attr] = xargs[attr];
+            };
+
+            //获取地址栏的参数放到scope.args
+            var uargs = _fns.getUrlParams();
+            for (var attr in uargs) {
+                scope.xargs[attr] = uargs[attr];
+            };
+
+            res = scope.xargs;
+        };
+        return res;
+    };
+
+
+
+    /*根据地址栏跳转到指定控制器,实际是根据地址栏规则修改scope的属性
+    规则##id#attr#url
+     */
+    _fns.changeCtrlrByHash = function () {
+
+
+        //拆解地址栏hash
+        var hasharr = unescape(window.location.hash).split('#');
+        if (hasharr.length < 4) return false;
+
+        //获取scope和url
+        var id = hasharr[1].substr(1);
+        var scope = _xdat.id2ctrlr[id];
+
+        if (!scope) return false;
+
+        var attr = hasharr[2];
+        var url = hasharr[3];
+        if (hasharr.length > 4) {
+            url += hasharr.slice(4).join('#');
+        } else if (!url || url == '') return false;
+
+        var res = {
+            scope: scope,
+            attr: attr,
+            url: url,
+        };
+
+        //兼容传递@ctrlrName
+        if (url[0] == '@') {
+            res.ctrlr = url;
+            url = _fns.getCtrlrUrl(url.substr(1));
+        };
+        if (!url || url == '') return false;
+
+        //刷新应用
+        _fns.applyScope(scope, function () {
+            scope[attr] = url;
+        })
+        return res;
+    };
+
+
+    /*获取地址栏参数
+     */
+    _fns.getUrlParam = function (name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+
+    /*获取地址栏全部参数
+     */
+    _fns.getUrlParams = function (url) {
+        var res;
+        url = (url) ? url : window.location.search;
+        url = String(url);
+        var parts = url.split('?');
+        if (parts.length > 1) {
+            var arr = parts[1].split('&');
+            var args = {};
+            arr.forEach(function (seg, i) {
+                var segarr = seg.split('=');
+                if (segarr.length > 1) {
+                    args[segarr[0]] = segarr[1];
+                };
+            });
+            res = args;
+        };
+        return res;
+    };
+
+
+    /*扩展$,获取父层的参数
+    控制器用来获取由页面传来的参数，这些值都设定在模版父层<div ng-include='aa' name='jack'>，得到{ng-include:'aa',name:'jack'}
+    */
+    $.fn.getParentAttr = $getParentAttr;
+
+    function $getParentAttr() {
+        var res = {};
+        var jo = this;
+        if (jo && jo[0] && jo.parent()[0]) {
+            var attrs = jo.parent()[0].attributes;
+            for (var i = 0; i < attrs.length; i++) {
+                var attr = attrs[i];
+                res[attr.name] = attr.value;
+            };
+        };
+        return res;
+    };
+
+
+
+
+
+    /*重新应用scope
+     */
+    _fns.applyScope = function (scope, fn) {
+        if (scope && scope.$root && scope.$root.$$phase != '$apply' && scope.$root.$$phase != '$digest') {
+            scope.$apply(fn);
+        };
+    };
+
+
+    /*扩展JSON.safeParse*/
+    JSON.safeParse = JSON.sparse = function (str) {
+        try {
+            return JSON.parse(str);
+        } catch (err) {
+            return undefined;
+        };
+    };
+
+
+
+
+
+
+    /**
+     * 上传到七牛存储，必须已经获得uploadtoken,最后的key必须与token匹配，如果没有key则使用随机文件名
+     * @param   {str} token    已经获取的上传凭证
+     * @param   {obj} file     需要上传的文件数据
+     * @param   {fn} progress 上传过程中更新的函数,一个参数obj包含lengthComputable,total,loaded
+     * @param   {fn} success  上传成功后的函数,三个参数,分别是返回信息(包含name,type,key),state('success'),xhr对象(带有file对象和domain)
+     * @param   {fn} error    上传失败后的函数
+     * @param   {fn} complete 上传完成后的函数
+     * @param   {fn} domain   上传到哪个存储空间，默认mfile.jieminuoketang.com
+     * @returns {xhr} 上传的xhr对象，带有file和domain属性
+     */
+    _fns.uploadFileQn2 = function (token, file, progress, success, error, complete, domain, key) {
+        var useargs = (token.constructor != String);
+
+        if (useargs) token = arguments.token;
+        if (!token) {
+            __errhdlr(new Error('_fns.uploadFileQn:token undefined.'))
+            return;
+        };
+
+        if (useargs) file = arguments.file;
+        if (!file) {
+            __errhdlr(new Error('_fns.uploadFileQn:file undefined.'))
+            return;
+        };
+
+        if (useargs) domain = arguments.domain || _cfg.qn.BucketDomain;
+
+        //准备fromdata
+        var formdata = new FormData();
+        formdata.append('token', token);
+        formdata.append('file', file);
+        if (key) formdata.append('key', key);
+
+        //发起上传
+        var set = {
+            url: "http://up.qiniu.com",
+            data: formdata,
+            type: 'POST',
+            processData: false, //屏蔽掉ajax自动header处理
+            contentType: false, //屏蔽掉ajax自动header处理
+        };
+
+        //监听事件
+        if (useargs) progress = arguments.progress;
+        if (progress) {
+            set.xhr = function () {
+                //为ajax添加progress事件监听
+                var xhr = $.ajaxSettings.xhr();
+                if (!xhr.file) xhr.file = file;
+                xhr.upload.addEventListener("progress", progress, false);
+                return xhr;
+            };
+        };
+
+        //添加各种监听函数
+        if (useargs) success = arguments.success;
+        if (success) set.success = success;
+        if (useargs) error = arguments.error;
+        if (error) set.error = error;
+        if (useargs) complete = arguments.complete;
+        if (complete) set.complete = complete;
+
+        var xhr = $.ajax(set);
+        xhr.file = file;
+        xhr.domain = domain;
+
+        //把xhr存入_cfg.xhrs
+        if (file.uploadId && file.id) {
+            _cfg.xhrs[file.uploadId][file.id] = xhr;
+        };
+
+        return xhr;
+    };
+
+    //根据key先获取指定token，然后上传;无返回
+    _fns.uploadFileQn = function (key, file, progress, success, error, complete, domain) {
+        var api = _cfg.qn.getUploadTokenApi;
+        var dat = {
+            fpath: key,
+        };
+        $.post(api, dat, function (res) {
+            console.log('>POST:', api, dat, res);
+            if (res.code == 1) {
+                _fns.uploadFileQn2(res.data.uptoken, file, progress, success, error, complete, domain, res.data.path);
+            } else {
+                __errhdlr(Error('_fns.uploadFileQn2:get uploadtoken failed.'));
+            }
+        });
+    };
+
+
+
+
+    /*最基本的上传按钮
+    progress(evt),//添加evt.percent
+    successfn(res),//增加res.url
+    返回一个uniqID，最终的xhr存储在_cfg.xhrs[uploadid][xhrid]，用于取消上传
+    */
+    _cfg.xhrs = {};
+
+
+
+    /**
+     * 上传一个或多个文件，指定目录版本
+     * @param   {str} path      存储的路径，后无斜杠，不包含uid，例如 myapp/folder1
+     * @param   {jquery对象} btnjo      点击的按钮对象，隐身ipt将跟在这个jo后面
+     * @param   {function} beforefn 在发起上传之前执行的函数,fn(f,xhr),可以在这里通过f.rename指定上传后的名称
+     * @param   {function} progressfn 上传过程中的函数，fn(f,evt),上传百分比进度evt.percent
+     * @param   {function} successfn  上传成功后执行的函数，fn(f,res)，上传的文件地址res.url
+     * @param   {function} abortfn    取消上传后执行的函数
+     * @param   {function} errorfn    出错执行的函数,fn(f,err)，标准xhr参数
+     * @param   {function} completefn 上传完成执行的函数,fn(f,xhr,status),标准xhr参数
+     * @param   {string} domain     上传到指定的bucket，默认http://pubfiles.10knet.com/
+     * @param   {boolean} multi     同时上传多个文件
+     * @param   {string} acceptstr     限定默认可以选择的文件类型
+     * @returns {int} uploadId整数，指向一个数组包含所有文件的xhr，数组存放在_cfg.xhrs[uploadId]
+     */
+    _fns.uploadFile = function (path, btnjo, beforefn, progressfn, successfn, abortfn, errorfn, completefn, domain, multi, acceptstr) {
+        if (!btnjo) {
+            __errhdlr(new Error('_fns.uploadFile:button undefined.'));
+            return;
+        };
+
+        //如果按钮已经有uploadid，那么直接使用，否则就重新创建
+        var uploadId = btnjo.attr('uploadId') || _fns.uuid();
+        btnjo.attr('uploadId', uploadId);
+        if (!_cfg.xhrs[uploadId]) _cfg.xhrs[uploadId] = {};
+
+        //创建file数据,隐身input放在btn之后
+        var filejo = btnjo.siblings('#uploadFileInput');
+        filejo.remove();
+        filejo = $('<input id="uploadFileInput" type="file" style="display:none"></input>').appendTo(btnjo);
+        if (multi) filejo.attr('multiple', "multiple");
+        if (acceptstr) filejo.attr('accept', acceptstr);
+        btnjo.after(filejo);
+
+        //给file input添加监听
+        filejo.bind('change', function () {
+            var fileobjs = filejo.get(0).files;
+            console.log('>start uploading', filejo.get(0).files[0].name);
+            if (!domain) domain = _cfg.qn.BucketDomain;
+
+            for (var i = 0; i < fileobjs.length; i++) {
+                var f = fileobjs[i];
+                if (abortfn) f.abortfn = abortfn;
+
+                //执行上传之前的动作,预先放置一个空的xhr，带有file信息
+                var xhrid = _fns.uuid();
+                var xhr = {};
+                xhr.file = f;
+                xhr.id = xhr.file.id = f.id = xhrid;
+                xhr.id = xhr.file.uploadId = f.uploadId = uploadId;
+
+                _cfg.xhrs[uploadId][xhrid] = xhr;
+
+                //可以利用beforfn修改文件名
+                var fname = f.name;
+                if (beforefn) beforefn(f, xhr);
+                var f_name = f.rename ? f.rename : f.name;
+
+                //开始上传
+                xhr = _fns.uploadFileQn(path + '/' + f_name, xhr.file,
+                    function (evt) {
+                        //添加evt.percent,为了避免abort之后progress会多运行一次，所以使用f.abort做判断
+                        if (progressfn && !f.abort) {
+                            if (evt.lengthComputable) {
+                                evt.percent = (100 * evt.loaded / evt.total).toFixed(0);
+                                f.percent = evt.percent;
+                            };
+                            progressfn(f, evt);
+                        };
+                    },
+                    function (res) {
+                        //把七牛的返回结果转为标准格式
+                        res['success'] = true;
+                        f.url = res.url = res['file_path'] = domain + res.key;
+                        res['msg'] = 'upload ok.';
+                        if (successfn) successfn(f, res);
+                    },
+                    function (f, err) {
+                        if (errorfn) errorfn(f, err);
+                    },
+                    function (xhr, status) {
+                        filejo.remove();
+                        if (completefn) completefn(f, xhr, status);
+                    }, domain);
+
+                if (xhr) _cfg.xhrs[uploadId][xhrid] = xhr;
+            }
+        });
+
+        //激活按钮点击事件
+        filejo.click();
+
+        return uploadId;
+    };
+
+
+    /**
+     * 上传多个文件，与uploadFile单个文件相同
+     * 指定目录版本
+     */
+    _fns.uploadFiles = function (btnjo, beforefn, progressfn, successfn, abortfn, errorfn, completefn, domain) {
+        return _fns.uploadFile(btnjo, beforefn, progressfn, successfn, abortfn, errorfn, completefn, domain, true);
+    };
+
+
+    /**
+     * 上传一个或多个文件，随机文件名版
+     * @param   {jquery对象} btnjo      点击的按钮对象，隐身ipt将跟在这个jo后面
+     * @param   {function} beforefn 在发起上传之前执行的函数,fn(f,xhr)
+     * @param   {function} progressfn 上传过程中的函数，fn(f,evt),上传百分比进度evt.percent
+     * @param   {function} successfn  上传成功后执行的函数，fn(f,res)，上传的文件地址res.url
+     * @param   {function} abortfn    取消上传后执行的函数
+     * @param   {function} errorfn    出错执行的函数,fn(f,err)，标准xhr参数
+     * @param   {function} completefn 上传完成执行的函数,fn(f,xhr,status),标准xhr参数
+     * @param   {string} domain     上传到指定的bucket，默认http://pubfiles.10knet.com/
+     * @param   {boolean} multi     同时上传多个文件
+     * @param   {string} acceptstr     限定默认可以选择的文件类型
+     * @returns {int} uploadId整数，指向一个数组包含所有文件的xhr，数组存放在_cfg.xhrs[uploadId]
+     */
+    _fns.uploadFile2 = function (btnjo, beforefn, progressfn, successfn, abortfn, errorfn, completefn, domain, multi, acceptstr) {
+        if (!btnjo) {
+            __errhdlr(new Error('_fns.uploadFile:button undefined.'));
+            return;
+        };
+
+        //如果按钮已经有uploadid，那么直接使用，否则就重新创建
+        var uploadId = btnjo.attr('uploadId') || _fns.uuid();
+        btnjo.attr('uploadId', uploadId);
+        if (!_cfg.xhrs[uploadId]) _cfg.xhrs[uploadId] = {};
+
+        //创建file数据,隐身input放在btn之后
+        var filejo = btnjo.siblings('#uploadFileInput');
+        filejo.remove();
+        filejo = $('<input id="uploadFileInput" type="file" style="display:none"></input>').appendTo(btnjo);
+        if (multi) filejo.attr('multiple', "multiple");
+        if (acceptstr) filejo.attr('accept', acceptstr);
+        btnjo.after(filejo);
+
+
+        //给file input添加监听
+        filejo.bind('change', function () {
+            var fileobjs = filejo.get(0).files;
+            if (!domain) domain = _cfg.qn.BucketDomain;
+
+            //获取随机文件名token
+            $.get(_cfg.qn.getUploadTokenApi2, function (res) {
+                for (var i = 0; i < fileobjs.length; i++) {
+                    var f = fileobjs[i];
+                    if (abortfn) f.abortfn = abortfn;
+
+                    //执行上传之前的动作,预先放置一个空的xhr，带有file信息
+                    var xhrid = _fns.uuid();
+                    var xhr = {};
+                    xhr.file = f;
+                    xhr.id = xhr.file.id = f.id = xhrid;
+                    xhr.uploadId = xhr.file.uploadId = f.uploadId = uploadId;
+
+                    _cfg.xhrs[uploadId][xhrid] = xhr;
+                    if (beforefn) beforefn(f, xhr);
+
+                    //开始上传
+                    xhr = _fns.uploadFileQn2(res.data.uptoken, f,
+                        function (evt) {
+                            //添加evt.percent,为了避免abort之后progress会多运行一次，所以使用f.abort做判断
+                            if (progressfn && !f.abort) {
+                                if (evt.lengthComputable) {
+                                    evt.percent = (100 * evt.loaded / evt.total).toFixed(0);
+                                    f.percent = evt.percent;
+                                };
+                                progressfn(f, evt);
+                            };
+                        },
+                        function (res) {
+                            //把七牛的返回结果转为标准格式
+                            res['success'] = true;
+                            f.url = res.url = res['file_path'] = domain + res.key;
+                            res['msg'] = 'upload ok.';
+                            if (successfn) successfn(f, res);
+                        },
+                        function (f, err) {
+                            if (errorfn) errorfn(f, err);
+                        },
+                        function (xhr, status) {
+                            filejo.remove();
+                            if (completefn) completefn(f, xhr, status);
+                        }, domain);
+
+                    if (xhr && abortfn) xhr['abortfn'] = abortfn;
+                    if (xhr) {
+                        xhr.id = xhrid;
+                        xhr.uploadId = uploadId;
+                        if (xhr.file) {
+                            xhr.file.id = xhrid;
+                            xhr.file.uploadId = uploadId;
+                        };
+                    };
+                    if (xhr) _cfg.xhrs[uploadId][xhrid] = xhr;
+                }
+            });
+        });
+
+        //激活按钮点击事件
+        filejo.click();
+
+        return uploadId;
+    };
+
+
+    /**
+     * 上传多个文件，与uploadFile单个文件相同
+     * 随机文件名版本
+     */
+    _fns.uploadFiles2 = function (btnjo, beforefn, progressfn, successfn, abortfn, errorfn, completefn, domain) {
+        return _fns.uploadFile2(btnjo, beforefn, progressfn, successfn, abortfn, errorfn, completefn, domain, true);
+    };
+
+
+    /**
+     * 取消上传，同时适用指定文件名版本和随机文件名版本
+     * @param {int} xhrid 最终xhr将存放在_cfg.xhrs[xhrid]
+     */
+    _fns.abortUpload = function (f) {
+        var xhr = _cfg.xhrs[f.uploadId][f.id];
+        if (f.abortfn) f.abortfn(f);
+        f.abort = true;
+        try {
+            xhr.abort();
+        } catch (err) {}
+    };
+
+
+    /*重新封装console的函数*/
+    var cnslPreStr = '>';
+    console.xerr = function () {
+        var args = arguments;
+        console.info(cnslPreStr, 'ERR:');
+        console.error.apply(this, args);
+    };
+    console.xlog = function () {
+        var args = arguments;
+        console.info(cnslPreStr, 'LOG:');
+        console.log.apply(this, args);
+    };
+    console.xinfo = function () {
+        var args = arguments;
+        console.info(cnslPreStr, 'INFO:');
+        console.info.apply(this, args);
+    };
+    console.xwarn = function () {
+        var args = arguments;
+        console.info(cnslPreStr, 'WARN:');
+        console.xwarn.apply(this, args);
+    };
+
+
+
+    /*创建唯一的id
+     */
+    _fns.uuid = function uniqueId(prefix) {
+        var ts = Number(new Date()).toString(36)
+        var rd = Number(String(Math.random()).replace('.', '')).toString(36);
+        var res = ts + '-' + rd;
+        if (prefix) res = prefix + '-' + res;
+        return res;
+    };
+
+
+    /*等待某个值为真然后运行函数fn
+    当condition(time)函数返回为真的时候执行；默认condition为返回true的空函数
+    interval检查间隔默认100毫秒，maxcheck最多等待时间毫秒默认10秒10000
+    fn函数fn(time),默认超时结束不运行;
+    forceRun超时最后也会运行这个函数，所以要避免强制运行就要检测时间小于maxtime
+    */
+    _fns.promiseRun = function (fn, condition, maxtime, interval, forceRun) {
+        if (!fn || fn.constructor != Function) return;
+        if (!condition || condition.constructor != Function) condition = function () {
+            return true;
+        };
+
+        if (!interval) interval = 100;
+        if (!maxtime) maxtime = 10000;
+
+        var bgntm = (new Date()).getTime();
+        var setid = setInterval(function () {
+            var now = (new Date()).getTime();
+            var tm = now - bgntm;
+            if (tm >= maxtime) {
+                //超时
+                if (forceRun === true) {
+                    try {
+                        fn(tm);
+                    } catch (err) {
+                        __errhdlr(new Error('_fns.promiseRun:timeout run error:' + err));
+                    }
+                };
+                clearInterval(setid);
+            } else {
+                //检测condition
+                if (condition(tm) == true) {
+                    try {
+                        fn(tm);
+                    } catch (err) {
+                        __errhdlr(new Error('_fns.promiseRun:run error:' + err));
+                    };
+                    clearInterval(setid);
+                };
+            }
+        }, interval);
+    };
+
+    //过滤html文件只留下body部分
+    _fns.getBody = function (str) {
+        if (!str) return '';
+        str = String(str);
+        var res = str.replace(/[\s\S]*<body/, '<div');
+        res = res.replace(/<\/body>[\s\S]*/, '</div>');
+        return res;
+    };
+
+
+    //获取目录地址的文件名
+    _fns.getFileName = function (url) {
+        return url.substring(url.lastIndexOf('/') + 1);
+    };
+
+    //获取目录地址的文扩展名
+    _fns.getFileExt = function (url) {
+        var fext = url.substring(url.lastIndexOf('.') + 1);
+        //去掉后面多余的参数
+        fext.replace(/[!\w]*[/s/S]*/, '');
+        return fext;
+    };
+
+
+
+    /*把一个对象转化为数组{key1:val1,key2:val2,...} =>[val1,val2,...]
+     * 使用usekv保留原有属性转为[{key:xx,val:xx},...],默认为假
+     */
+    _fns.obj2arr = function (obj, usekv) {
+        var arr = [];
+        for (var attr in obj) {
+            if (!usekv) {
+                arr.push(obj[attr]);
+            } else {
+                arr.push({
+                    key: attr,
+                    val: obj[attr]
+                });
+            }
+        };
+        return arr;
+    };
+
+
+
+    /**
+     * 将一个数组转化为对象
+     * @param   {array}   arr    需要转换的数组
+     * @param   {boolean} keyval 是否是[key,val,key,val]模式,默认为真,keyobj转换为'key':{'key':key,'val':val}
+     * @returns {Object}   转换结果，可能是空对象
+     */
+
+    _fns.arr2obj = function (arr, keyval, keyobj) {
+        if (keyval === undefined) keyval = true;
+        var res = {};
+        if (!arr || !Array.isArray(arr)) return res;
+        if (!keyval) {
+            for (var i = 0; i < arr.length; i++) {
+                res[String(i)] = arr[i];
+            };
+        } else {
+            for (var i = 0; i < arr.length; i += 2) {
+                if ((i + 1) < arr.length) {
+                    if (keyobj) {
+                        res[String(arr[i])] = {
+                            key: String(arr[i]),
+                            val: arr[i + 1]
+                        };
+                    } else {
+                        res[String(arr[i])] = arr[i + 1];
+                    }
+                };
+            };
+        };
+        return res;
+    }
+
+
+
+    /**
+     * 通过属性值获取对象的属性名
+     * @param   {Object} obj 对象
+     * @param   {Object} val 值value
+     * @returns {String} 属性名
+     */
+    _fns.getKeyByVal = function (obj, val) {
+        for (var prop in obj) {
+            if (obj.hasOwnProperty(prop)) {
+                if (obj[prop] === val)
+                    return prop;
+            };
+        };
+    };
+
+
+    /**
+     * 反转kvmap成vkmap
+     * @param   {object} obj 原对象
+     * @returns {object} 反转后的对象
+     */
+    _fns.reverseMap = function (obj) {
+        var res = {};
+        for (var key in obj) {
+            var val = obj[key];
+            var sval = String(val);
+            if (val && sval && sval != '') {
+                res[sval] = key;
+            };
+        };
+
+        return res;
+    };
+
+
+    /**
+     * 将由canvas获得的datauri转为可以用来直接上传的blob
+     * @param   {string}   dataURI 由toDataURL方法转化得到
+     * @returns {blob} 可以直接用来上传的blob数据
+     */
+    _fns.dataURItoBlob = function (dataURI) {
+        if (typeof dataURI !== 'string') {
+            throw new Error('Invalid argument: dataURI must be a string');
+        }
+        dataURI = dataURI.split(',');
+        var type = dataURI[0].split(':')[1].split(';')[0],
+            byteString = atob(dataURI[1]),
+            byteStringLength = byteString.length,
+            arrayBuffer = new ArrayBuffer(byteStringLength),
+            intArray = new Uint8Array(arrayBuffer);
+        for (var i = 0; i < byteStringLength; i++) {
+            intArray[i] = byteString.charCodeAt(i);
+        }
+        return new Blob([intArray], {
+            type: type
+        });
+    };
+
+    /**
+     * 把canvas转为blob
+     * @param   {jqueryobj} canvasjo canvas对象
+     * @returns {blob} blob对象
+     */
+    _fns.canvasToBlob = function (canvasjo) {
+        if (canvasjo instanceof jQuery && canvasjo[0] && canvasjo[0].toDataURL) {
+            var datauri = canvasjo[0].toDataURL('image/png');
+            return _fns.dataURItoBlob(datauri);
+        };
+    };
+
+
+
+    //拼合分享链接
+    _fns.buildShareurl = function (shareto, title, url, pic) {
+        if (!title) title = "我在杰米诺课堂学习编程啦，你也来吧！";
+        if (!url == undefined) url = "http://www.jieminuoketang.com";
+
+        var strp = "title=" + title + "&url=" + url + "&pic=" + pic;
+        var res;
+        switch (shareto) {
+            case 'qq':
+                res = "http://connect.qq.com/widget/shareqq/index.html?" + strp;
+                break;
+            case 'qzone':
+                res = "http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?" + strp + "&summary=我在杰米诺课堂学习编程啦，你也来吧！";
+                break;
+            case 'weibo':
+                res = "http://service.weibo.com/share/share.php?" + strp;
+                break;
+        };
+
+        return str;
+    };
+
+
+    //监测文件是否存在
+    _fns.checkFileExist = function (url) {
+        var http = new XMLHttpRequest();
+        http.open('HEAD', url, false);
+        http.send();
+        return http.status != 404;
+    };
+
+    //获取app的icon函数：尝试链接是否404,自动设置到fileinfo.icon
+    _fns.getAppIcon = function (scope, appinfo, uselg) {
+        //尝试读取图标文件
+        var iconurlbase = _cfg.qn.BucketDomain + appinfo.uid + '/' + appinfo.name + '/icon.png-avatar128?_=';
+        if (uselg) iconurlbase = _cfg.qn.BucketDomain + appinfo.uid + '/' + appinfo.name + '/icon.png-avatar512?_=';
+
+        var exist = _fns.checkFileExist(iconurlbase);
+        if (exist) {
+            appinfo.icon = iconurlbase + (new Date()).getTime();
+        } else {
+            if (uselg) {
+                appinfo.icon = _cfg.defaultIconSm;
+            } else {
+                appinfo.icon = _cfg.defaultIconLg;
+            }
+        }
+    };
+
+
+
+    /**
+     * 读取分享页面模版，替换关键字，上传得到分享页面html文件
+     * @param {string} type       分享的类型,参照_cfg.shareTemplates，'achieve'
+     * @param {object} shareobj   分享的数据对象，参照每个模版不同的格式要求
+     * @param {function} okfn(shareurl) 生成分享页面后的操作
+     */
+    _fns.createSharePage = function (type, shareobj, okfn) {
+        var tmp = _cfg.shareTemplates[type];
+        if (!tmp) return;
+        var tmpurl = tmp.url;
+
+        $.get(tmpurl, function (res) {
+            console.log('GET', tmpurl, res.substr(0, 25));
+            //替换模版
+            var blob = res.replace("\'##shareData##\'", JSON.stringify(shareobj));
+            //上传成为文件
+            var fileurl = '_share/' + _fns.uuid() + '.html';
+            _fns.uploadFileQn(fileurl, blob, null, function (arg1, arg2, arg3) {
+                if (arg2 == 'success' && arg1.key) {
+                    if (okfn && okfn.constructor == Function) {
+                        var shareurl = _cfg.qn.BucketDomain + arg1.key;
+                        try {
+                            okfn(shareurl)
+                        } catch (err) {}
+                    };
+                };
+            });
+        });
+    };
+
+    /**
+     * 分享App，自动生成分享页面
+     * @param {object} appinfo    app信息对象
+     * @param {boolean} openDialog 生成页面后是否自动打开分享窗口
+     * @param {function} okfn       生成分享页面后的回调，应该把opendialog设置为false
+     */
+    _fns.createShareAppPage = function (userinfo, appinfo, okfn) {
+        var shareObj = {
+            app: appinfo,
+            user: userinfo,
+        };
+        //创建分享页面然后弹窗
+        _fns.createSharePage('app', shareObj, function (shareurl) {
+            //添加历史记录
+            _fns.addShareAppHis(shareurl);
+
+            if (okfn && okfn.constructor == Function) {
+                try {
+                    okfn(shareurl);
+                } catch (err) {};
+            };
+        });
+    };
+
+    /**
+     * 添加分享成就的历史记录
+     * @param {string} shareurl 分享的页面地址
+     */
+    _fns.addShareAppHis = function (shareurl) {
+        var api = _global.api('share_addShareHis');
+        var dat = {
+            type: _cfg.mgHisType.shareApp,
+            url: shareurl
+        };
+
+        $.post(api, dat, function (res) {
+            console.log('POST', api, dat, res);
+        });
+    };
+
+
+
+
+
+
+
+
+
+    /*自动运行的函数*/
+    _fns.autoStartPage();
+
+
+
+
+
+
+
+    //end
+})();
+
+
+
+
+
+
+//全局变量
+/*专用err处理函数,适合co().then()使用*/
+function __errhdlr(err) {
+    console.xerr(err.stack);
+};
+
+/*专用空函数，只输出不做额外处理,适合co().then()使用*/
+function __nullhdlr(res) {};
+
+/*专用空函数，只输出不做额外处理,适合co().then()使用*/
+function __infohdlr(res) {
+    console.xinfo(res);
+};
+
+/*专用空函数，只纪录日志不做额外处理,适合co().then()使用*/
+function __loghdlr(res) {
+    console.xlog(res);
+};

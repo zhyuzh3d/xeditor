@@ -1,0 +1,60 @@
+/*logo*/
+
+.jmnktLogo {
+    background: #000;
+    width: 150px;
+    height: 20px;
+    cursor: pointer;
+    -webkit-mask: url(http://files.jieminuoketang.com/1/aaw6vsns2i5k/src/jmnkt2.svg) no-repeat 100% 100%;
+    mask: url(http://files.jieminuoketang.com/1/aaw6vsns2i5k/src/jmnkt2.svg) no-repeat 100% 100%;
+}
+.jmnktLogo:hover {
+    background: #00bfa5;
+}
+
+.jmnktLogo2 {
+    width: 150px;
+    height: 20px;
+    cursor: pointer;
+    background-size: cover;
+    background-image:url(http://files.jieminuoketang.com/1/aaw6vsns2i5k/src/jmnkt2h20min.png);
+}
+.jmnktLogo2:hover {
+    background-image:url(http://files.jieminuoketang.com/1/aaw6vsns2i5k/src/jmnkt2gh20min.png);
+}
+
+
+/*avatar*/
+
+.avatar-sm {
+    width: 24px;
+    height: 24px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(0, 0, 0, 0.25);
+}
+.inline {
+    display: inline-block;
+}
+
+/*顶部导航栏的文字链接*/
+
+.textbtn {
+    font-size: 14px;
+    color: #444;
+    cursor: pointer;
+    padding: 0 4px;
+}
+.textbtn:hover {
+    color: #00bfa5;
+}
+.elips {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.botbtn{
+    border-radius: 0;
+    margin-top:4px
+}

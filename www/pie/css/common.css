@@ -1,0 +1,26 @@
+body {
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    background: #FFF;
+    overflow: hidden;
+}
+#appBox {
+    min-height: 100%;
+    padding: 0
+}
+.doc_ctrlr {
+    padding: 0;
+    overflow-x: hidden;
+}
+.elips {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.avatar-md {
+    width: 32px;
+    height: 32px;
+    border-radius: 32px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}

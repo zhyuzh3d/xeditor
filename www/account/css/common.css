@@ -1,0 +1,10 @@
+body {
+    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+    background: #FAFAFA;
+}
+.elips {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+

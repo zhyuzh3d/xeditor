@@ -1,0 +1,109 @@
+<script>
+    _fns.addCtrlrJs('pie_admsms');
+
+</script>
+
+<!--控制器界面部分-->
+<div layout layout-align='stretch stretch' id='pie_admsms' ng-controller='pie_admsms' class='pie_admsms' style='width: 100%; height: 100%; overflow:visible;background:#FFF'>
+    <style>
+        /*内部样式，以控制器名为class开头*/
+
+        .pie_admsms .avatar-md {
+            width: 32px;
+            height: 32px;
+            border-radius: 32px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+    </style>
+    <!--控制器界面部分-->
+    <div layout-padding style="width:100%">
+        <!--        顶部-->
+        <div>
+            <md-button hide-gt-sm class="md-icon-button" ng-click="$root.tagLeftMenu()" style='margin-left:0' aria-label='tagleft'>
+                <span class="fa fa-bars fa-lg"></span>
+            </md-button>
+            <md-button id='leftnavbtn' class="md-icon-button hidden-sm hidden-xs" ng-click="$root.tagLeftMenu()" style='margin-left:0;color:#AAA' aria-label='tagleft' data-toggle="tooltip" data-placement="bottom" title="显示／隐藏左侧菜单栏">
+                <span class="fa fa-chevron-left fa-lg" ng-show='$root.leftMenuOpen'></span>
+                <span class="fa fa-bars fa-lg" ng-hide='$root.leftMenuOpen'></span>
+            </md-button>
+            <md-button class="md-raised" ng-class='{true:"md-accent",false:"md-default"}[mode=="reg"]' ng-click='setMode("reg")' aria-label='a'>注册验证</md-button>
+            <md-button class="md-raised " ng-class='{true:"md-accent",false:"md-default"}[mode=="rst"]' ng-click='setMode("rst")' aria-label='a'>重置验证</md-button>
+
+            <div class="dropdown pull-right" ng-show='hasLogin' style="margin-top:8px">
+                <button class="dropdown-toggle" id="ddmenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background:none;border:none">
+                    <span>
+                        <img class='avatar-md' ng-src='{{myUsrInfo.avatar?myUsrInfo.avatar+"-avatar32":""}}' />
+                    </span>
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="ddmenu1">
+                    <li class="btn" ng-click='gotoProfile()' style="width:100%">资料设置</li>
+                    <md-divider></md-divider>
+                    <li class="btn" ng-click='logout()' style="width:100%">退出</li>
+                </ul>
+            </div>
+        </div>
+
+        <!--        列表-->
+        <div>
+            <div>
+                <span>共{{listData.length}}个；当前第{{curPageIndex}}页</span>
+            </div>
+            <nav class="pull-right">
+                <ul class="pagination">
+                    <li><a href="#" ng-click='toPrevPage()'>&laquo;</a></li>
+                    <li ng-repeat='n in paginationArr' ng-click='toPageN(n)'>
+                        <a href="#" ng-bind='n'></a>
+                    </li>
+                    <li><a href="#" ng-click='toNextPage()'>&raquo;</a></li>
+                </ul>
+            </nav>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>key</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat='dt in curPageData'>
+                        <td ng-bind='$index'></td>
+                        <td ng-bind='dt'></td>
+                        <td>
+                            <a href="#" ng-click='deleteKey(dt)'>删除</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <nav>
+                <ul class="pagination">
+                    <li><a href="#" ng-click='toPrevPage()'>&laquo;</a></li>
+                    <li ng-repeat='n in paginationArr' ng-click='toPageN(n)'>
+                        <a href="#" ng-bind='n'></a>
+                    </li>
+                    <li><a href="#" ng-click='toNextPage()'>&raquo;</a></li>
+
+                </ul>
+            </nav>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<!---->
