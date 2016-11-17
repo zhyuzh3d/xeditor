@@ -62,10 +62,11 @@ if (!_pie) var _pie = {};
     };
 
     //自动调整上传接口
-    if (/^\w*\.jieminuoketang\.com$/.test(location.host)) {
-        _cfg.qn.BucketDomain = 'http://files.jieminuoketang.com/';
-        _cfg.qn.RtBucketDomain = 'http://rtfiles.jieminuoketang.com/';
+    if (/^\w*\.xmgc360\.com$/.test(location.host)) {
+        _cfg.qn.BucketDomain = 'http://apps.xmgc360.com/';
+        _cfg.qn.RtBucketDomain = 'http://rtapps.xmgc360.com/';
     };
+
 
 
     //正则表达式
@@ -125,25 +126,25 @@ if (!_pie) var _pie = {};
         base: {
             desc: '基本的代码派文件模版',
             files: {
-                'index.html': 'http://www.jieminuoketang.com/pie/templates/base/index.html',
-                'index.css': 'http://www.jieminuoketang.com/pie/templates/base/index.css',
-                'index.js': 'http://www.jieminuoketang.com/pie/templates/base/index.js',
+                'index.html': _global.hostUrl+'/templates/base/index.html',
+                'index.css': _global.hostUrl+'/templates/base/index.css',
+                'index.js': _global.hostUrl+'/templates/base/index.js',
             },
         },
         angular: {
             desc: '基本的angularJs文件模版',
             files: {
-                'index.html': 'http://www.jieminuoketang.com/pie/templates/angular/index.html',
-                'index.css': 'http://www.jieminuoketang.com/pie/templates/angular/index.css',
-                'index.js': 'http://www.jieminuoketang.com/pie/templates/angular/index.js',
+                'index.html': _global.hostUrl+'/templates/angular/index.html',
+                'index.css': _global.hostUrl+'/templates/angular/index.css',
+                'index.js': _global.hostUrl+'/templates/angular/index.js',
             },
         },
         min: {
             desc: '最简单的web页面模版',
             files: {
-                'index.html': 'http://www.jieminuoketang.com/pie/templates/min/index.html',
-                'index.css': 'http://www.jieminuoketang.com/pie/templates/min/index.css',
-                'index.js': 'http://www.jieminuoketang.com/pie/templates/min/index.js',
+                'index.html': _global.hostUrl+'/templates/min/index.html',
+                'index.css': _global.hostUrl+'/templates/min/index.css',
+                'index.js': _global.hostUrl+'/templates/min/index.js',
             },
         },
     };
@@ -152,11 +153,11 @@ if (!_pie) var _pie = {};
     _cfg.shareTemplates = {
         achieve: {
             id: 1,
-            url: 'http://www.jieminuoketang.com/pie/templates/share/achieve.html'
+            url: _global.hostUrl+'/templates/share/achieve.html'
         },
         app: {
             id: 2,
-            url: 'http://www.jieminuoketang.com/pie/templates/share/app.html'
+            url: _global.hostUrl+'/pie/templates/share/app.html'
         },
     };
 
@@ -278,7 +279,7 @@ if (!_pie) var _pie = {};
     };
 
     //设置相对路径，适配测试和正式
-    _cfg.home = 'http://' + window.location.host + '/pie/';
+    _cfg.home = 'http://' + window.location.host + '/';
 
     //设置获取ctrlr路径方法
     _fns.getCtrlrUrl = function (ctrlrname, ext) {
@@ -501,7 +502,7 @@ if (!_pie) var _pie = {};
      * @param   {fn} success  上传成功后的函数,三个参数,分别是返回信息(包含name,type,key),state('success'),xhr对象(带有file对象和domain)
      * @param   {fn} error    上传失败后的函数
      * @param   {fn} complete 上传完成后的函数
-     * @param   {fn} domain   上传到哪个存储空间，默认mfile.jieminuoketang.com
+     * @param   {fn} domain   上传到哪个存储空间，默认apps.xmgc360.com
      * @returns {xhr} 上传的xhr对象，带有file和domain属性
      */
     _fns.uploadFileQn2 = function (token, file, progress, success, error, complete, domain, key) {
@@ -1059,8 +1060,8 @@ if (!_pie) var _pie = {};
 
     //拼合分享链接
     _fns.buildShareurl = function (shareto, title, url, pic) {
-        if (!title) title = "我在杰米诺课堂学习编程啦，你也来吧！";
-        if (!url == undefined) url = "http://www.jieminuoketang.com";
+        if (!title) title = "我在项目工场学习编程啦，你也来吧！";
+        if (!url == undefined) url = "http://editor.xmgc360.com";
 
         var strp = "title=" + title + "&url=" + url + "&pic=" + pic;
         var res;
