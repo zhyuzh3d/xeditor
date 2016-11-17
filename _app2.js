@@ -1,7 +1,7 @@
 /*file添加时间戳重定向*/
 var http = require('http');
 var server = http.createServer(function (request, response) {
-    var reurl = 'http://files.jieminuoketang.com' + request.url;
+    var reurl = 'http://apps.xmgc360.com' + request.url;
     if (reurl.indexOf('?') != -1) {
         reurl += '&_=' + String(Math.random()).substr(2);
     } else {

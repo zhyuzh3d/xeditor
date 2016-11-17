@@ -22,11 +22,11 @@ var $sktio = global.$sktio = require('socket.io');
 var $scaptcha = global.$scaptcha = require('svg-captcha');
 var $qiniu = global.$qiniu = require('qiniu');
 var $jwt = global.$jwt = require('jwt-simple');
-//var $moment = global.$moment = require('moment');
-//var $cors = global.$cors = require('koa-cors');
+var $moment = global.$moment = require('moment');
+var $cors = global.$cors = require('koa-cors');
 
 //自定义库引入
-global._xcfg = require('../jieminuo_xcfg.js');
+global._xcfg = require('../xeditor_xcfg.js');
 global._mime = require('./my_modules/mime.js');
 global._ctnu = require('./my_modules/ctnu.js');
 global._cfg = require('./my_modules/cfg.js');
@@ -109,6 +109,12 @@ koaSvr.use(_ndwr);
 
 
 //test
+
+/*
+var regx=/^http:\/\/((?!app)\w)*\.?xmgc360\.com$/;
+console.log('>>>sms',regx.test('http://sms.xmgc360.com'));
+console.log('>>>app',regx.test('http://rtapp.xmgc360.com'));
+*/
 
 
 
