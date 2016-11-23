@@ -6,6 +6,29 @@ var _fns = {};
 
 
 //基础函数扩充---------------------------------------
+
+/*扩充jwt解码*/
+$jwt.safeDecode = function () {
+    var res;
+    try {
+        res = $jwt.decode.apply(this, arguments);
+    } catch (err) {
+        console.xerr('$jwt.safeDecode:', err);
+    };
+    return res;
+};
+/*扩充jwt编码*/
+$jwt.safeEncode = function () {
+    var res;
+    try {
+        res = $jwt.encode.apply(this, arguments);
+    } catch (err) {
+        console.xerr('$jwt.safeEncode:', err);
+    };
+    return res;
+};
+
+
 /*扩展JSON.safeParse*/
 JSON.safeParse = JSON.sparse = function (str) {
     try {

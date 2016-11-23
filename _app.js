@@ -110,6 +110,16 @@ koaSvr.use(_ndwr);
 
 //test
 
+var token='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI3NTciLCJuYW1lIjoi5rWL6K-V5aeT5ZCNIn0.HP3quPR3RIl-cggWyFz8dANZ1B8wqYQ-Eq9df6AHgo0';
+var secret='FLZX3000Cysyhl9t_GEM';
+var payload={uid:99};
+var jwt=$jwt.safeDecode(token,secret);
+var jwt2=$jwt.safeEncode(jwt, secret);
+
+console.log('>>>>jwtDE',jwt);
+console.log('>>>>jwtEN',jwt2);
+
+
 /*
 var regx=/^http:\/\/((?!app)\w)*\.?xmgc360\.com$/;
 console.log('>>>sms',regx.test('http://sms.xmgc360.com'));

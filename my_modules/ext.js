@@ -42,7 +42,7 @@ _rotr.apis.ext_getWildDogCustomToken = function () {
             "exp": new Date().getTime() + _cfg.dur.month,
         };
 
-        var dat = $jwt.encode(payload, secret);
+        var dat = $jwt.safeEncode(payload, secret);
 
         //返回数据
         ctx.body = __newMsg(1, 'ok', dat);

@@ -431,8 +431,9 @@ if (!_pie) var _pie = {};
      */
     _fns.getUrlParams = function (url) {
         var res;
-        url = (url) ? url : window.location.search;
+        url = (url) ? url : window.location.href;
         url = String(url);
+        //var parts = unescape(url).split('?');
         var parts = url.split('?');
         if (parts.length > 1) {
             var arr = parts[1].split('&');
@@ -440,7 +441,7 @@ if (!_pie) var _pie = {};
             arr.forEach(function (seg, i) {
                 var segarr = seg.split('=');
                 if (segarr.length > 1) {
-                    args[segarr[0]] = segarr[1];
+                    args[segarr[0]] = decodeURIComponent(segarr[1]);
                 };
             });
             res = args;
