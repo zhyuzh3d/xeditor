@@ -53,7 +53,7 @@ var cnslPreStr = '>';
 console.xerr = function () {
     var args = arguments;
     console.info(cnslPreStr, 'ERR:');
-    console.error.apply(this, args);
+    console.info.apply(this, args);
 };
 console.xlog = function () {
     var args = arguments;
@@ -76,7 +76,9 @@ console.xwarn = function () {
 global.__errhdlr = __errhdlr;
 
 function __errhdlr(err) {
-    err.stack ? console.xerr(err.stack) : console.xerr(err);
+    console.xerr.apply(this, arguments);
+    var er = arguments[arguments.length - 1];
+    er.stack ? console.error(er) : null;
 };
 
 /*专用空函数，只输出不做额外处理,适合co().then()使用*/

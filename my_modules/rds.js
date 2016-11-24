@@ -9,8 +9,6 @@ var _rds = {};
 _rds.start = function () {
     var cli = _rds.cli = $redis.createClient(6379, 'localhost', {});
 
-
-
     //全部key列表,所有映射map_开头,所有临时tmp_开头,所有对象直接写
     _rds.k = {
 
@@ -76,9 +74,9 @@ _rds.start = function () {
         if (bak == true || bak === undefined) {
             $fs.rename("/var/lib/redis/dump.rdb", "/var/lib/redis/dump.rdb." + ts, function (err) {
                 if (err) {
-                    __errhdlr("_rds:saveDbBak:rename dump.rdb failed！");
+                    __errhdlr("_rds:saveDbBak:rename dump.rdb failed:", err);
                 } else {
-                    __infohdlr("_rds:saveDbBak:rename dump.rdb ok:" + ts);
+                    __infohdlr("_rds:saveDbBak:rename dump.rdb ok:", ts);
                     _rds.cli.bgsave();
                 }
             });

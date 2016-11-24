@@ -65,7 +65,7 @@ $co(function* () {
     yield _qn.startPrms();
     _rds.start();
     yield _mngs.startPrms();
-    __infohdlr('Http server is running on:' + _app.hostPort);
+    __infohdlr('Http server is running on:', _app.hostPort);
     __infohdlr('------', new Date(), '------');
 });
 
@@ -110,6 +110,7 @@ koaSvr.use(_ndwr);
 
 //test
 
+/*
 var token='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI3NTciLCJuYW1lIjoi5rWL6K-V5aeT5ZCNIn0.HP3quPR3RIl-cggWyFz8dANZ1B8wqYQ-Eq9df6AHgo0';
 var secret='FLZX3000Cysyhl9t_GEM';
 var payload={uid:99};
@@ -118,6 +119,7 @@ var jwt2=$jwt.safeEncode(jwt, secret);
 
 console.log('>>>>jwtDE',jwt);
 console.log('>>>>jwtEN',jwt2);
+*/
 
 
 /*

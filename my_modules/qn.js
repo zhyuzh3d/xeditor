@@ -23,10 +23,10 @@ _qn.startPrms = function () {
         /*初始化设置,依赖xcfg*/
         _app.httpSvr.listen(_qn.cfg.Port, function (err, dat) {
             if (err) {
-                __errhdlr("_qn:startPrms:failed:" + err.message);
+                __errhdlr("_qn:startPrms:failed:", err.message);
                 rejectfn(err);
             } else {
-                __infohdlr("_qn:startPrms:is ready on port:" + _qn.cfg.Port);
+                __infohdlr("_qn:startPrms:is ready on port:", _qn.cfg.Port);
                 resolvefn(_qn);
             };
         });
