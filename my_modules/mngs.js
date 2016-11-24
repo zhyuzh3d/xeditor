@@ -12,7 +12,7 @@ _mngs.startPrms = function () {
             rejectfn(err);
         });
         _mngs.db.once('open', function () {
-            __infohdlr('_mngs:startPrms:is ready');
+            __infohdlr('_mngs:startPrms:is ready.');
             resolvefn(_mngs);
         });
     });

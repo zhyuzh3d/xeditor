@@ -69,30 +69,30 @@ _rds.start = function () {
 
 
     //备份函数，先重命名文件，然后启动bgsave命令
-    _rds.saveDbBak = function (bak) {
-        var ts = (new Date()).getTime();
-        if (bak == true || bak === undefined) {
-            $fs.rename("/var/lib/redis/dump.rdb", "/var/lib/redis/dump.rdb." + ts, function (err) {
+    _rds.saveDbToFile = function () {
+        $co(function* () {
+            yield _ctnu([_rds.cli, 'bgsave']);
+            var ts = (new Date()).getTime();
+            var path = '/var/lib/redis/';
+            var newfile = path + "dump.rdb." + ts;
+            $fs.rename(path + "dump.rdb", newfile, function (err) {
                 if (err) {
-                    __errhdlr("_rds:saveDbBak:rename dump.rdb failed:", err);
+                    __errhdlr("_rds:saveDbBak:rename dump.rdb failed:", err.message);
                 } else {
-                    __infohdlr("_rds:saveDbBak:rename dump.rdb ok:", ts);
-                    _rds.cli.bgsave();
+                    __infohdlr("_rds:saveDbBak:rename dump.rdb to ", newfile);
                 }
             });
-        } else {
-            _rds.cli.bgsave();
-        }
+        });
     };
 
     //每次启动先备份当前数据库
-    _rds.saveDbBak();
+    _rds.saveDbToFile();
 
-    //每小时自动执行备份
-    _rds.autoBakId = setTimeout(function () {
-        _rds.saveDbBak();
-    }, 1000 * 3600);
-    __infohdlr("_rds:autoBak is running,id is rds.autoBakId");
+    //每12小时自动执行备份
+    _rds.autoBakTimrId = setInterval(function () {
+        _rds.saveDbToFile();
+    }, 1000 * 3600 * 12);
+    __infohdlr('_rds.start:autoBak timer is runing.');
 };
 
 
