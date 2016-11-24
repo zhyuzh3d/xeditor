@@ -117,6 +117,21 @@
             var daysdata = {};
             var now = new Date();
 
+            //填充最近8天的空数据
+            for (var i = 0; i < 7; i++) {
+                var day = moment(new Date()).subtract(i, 'days');
+                var ymdstr = day.format('YYYY-MM-DD');
+                var ymdate = new Date(ymdstr + ' ' + moment(now).format('hh:mm:ss'));
+                daysdata[ymdstr] = {
+                    date: ymdate,
+                    name: ymdstr,
+                    length: 0,
+                    changes: 0
+                };
+                console.log('>>>>',ymdate);
+
+            };
+
             //把数据按照appid规整,分别加入图表数据
             for (var i = 0; i < hisarr.length; i++) {
                 var his = hisarr[i];
@@ -139,7 +154,9 @@
                             length: 0,
                             changes: 0
                         };
+                        console.log('>>>XX',daysdata[ymdstr]);
                     };
+
                     daysdata[ymdstr].changes += Number(his.param.changes);
                     daysdata[ymdstr].length += Number(his.param.length);
 
@@ -176,7 +193,7 @@
                     data: arr,
                     type: 'scatter',
                     symbolSize: function (dt) {
-                        var size = Math.sqrt(dt[2]);
+                        var size = Math.sqrt(dt[2]) * 2;
                         return size;
                     },
                     label: {
@@ -205,7 +222,7 @@
                     emphasis: {
                         show: true,
                         formatter: function (params) {
-                            return params.data[2].substr(5) + '总计' + params.data[1].toFixed(0);
+                            return params.data[2].substr(5) + '总计' + params.data[1] * 0.5.toFixed(0);
                         },
                         position: 'top'
                     }
@@ -228,7 +245,7 @@
                 var dt = daysdata[attr];
                 $scope.chartTotal.days += 1;
                 //最多每秒输入一个字符
-                linedata.data.push([dt.date, dt.changes, dt.name, dt.length]);
+                linedata.data.push([dt.date, dt.changes * 2, dt.name, dt.length]);
             };
             data.push(linedata);
 
