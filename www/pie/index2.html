@@ -16,25 +16,23 @@
     <script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
 
     <script>
-        var api = '/api/acc_getMyInfo';
+        var api = '/api/test';
         $.ajax({
             type: "POST",
             url: api,
             xhrFields: {
                 withCredentials: true
             },
-
             success: function(res) {
-                console.log('>>>>>acc_getMyInfo1', res);
-
+                console.log('>>>>>test-xcros', res);
             }
         });
 
-        $.post(api, {
-            uid: 99
-        }, function(res) {
-            console.log('>>>>>acc_getMyInfo2', res);
-        });
+//        $.post(api, {
+//            uid: 99
+//        }, function(res) {
+//            console.log('>>>>>acc_getMyInfo2', res);
+//        });
 
 
     </script>

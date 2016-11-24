@@ -121,10 +121,6 @@ _rotr.apis.acc_getMyInfo = function () {
 
     var co = $co(function* () {
 
-        //test
-        console.log('>ctx', ctx);
-
-
         var msg;
 
         //检测是否存在账号ukey，

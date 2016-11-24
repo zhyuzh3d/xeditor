@@ -77,9 +77,9 @@ _rds.start = function () {
             var newfile = path + "dump.rdb." + ts;
             $fs.rename(path + "dump.rdb", newfile, function (err) {
                 if (err) {
-                    __errhdlr("_rds:saveDbBak:rename dump.rdb failed:", err.message);
+                    __errhdlr("_rds.saveDbToFile:rename dump.rdb failed:", err.message);
                 } else {
-                    __infohdlr("_rds:saveDbBak:rename dump.rdb to ", newfile);
+                    __infohdlr("_rds.saveDbToFile:rename dump.rdb to ", newfile);
                 }
             });
         });

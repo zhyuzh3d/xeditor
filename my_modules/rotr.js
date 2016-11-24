@@ -52,6 +52,12 @@ function* apihandler(next) {
 _rotr.apis.test = function () {
     var ctx = this;
     var co = $co(function* () {
+        var token = ctx.cookies.get('jwt_access_token');
+        var jwt = $jwt.safeDecode(token, _xcfg.crossSecret);
+        console.log('>>>>jwt token', token);
+        console.log('>>>>jwt right', jwt);
+        console.log('>>>>jwt wrong key', $jwt.safeDecode(token, '_xcfg.crossSecret'));
+        console.log('>>>>jwt wrong fmt', $jwt.safeDecode('token', '_xcfg.crossSecret'));
 
         var resdat = {
             query: ctx.query.nick,
@@ -67,11 +73,23 @@ _rotr.apis.test = function () {
     return co;
 };
 
+
+
+
+
+
+
+
 /*测试接口,返回请求的数据
  */
 _rotr.apis.test2 = function () {
     var ctx = this;
     var co = $co(function* () {
+
+
+
+
+
 
         var code = Math.random().toString().substr(2, 8);
         var exp = new Date().getTime() + 60000;
