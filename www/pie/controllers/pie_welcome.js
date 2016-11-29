@@ -142,7 +142,7 @@
         //弹出重新初始化app的功能
         $scope.RIappName = '';
         $scope.RIappAlias = '';
-        $scope.RIselTemplate = 'base';
+        $scope.RIselTemplate = 'base(Jquery+Bootstrap)';
 
         //弹出提示窗口重新初始化app
         $scope.openReInitDialog = function (appinfo) {
@@ -155,7 +155,7 @@
                 .ok('重新初始化')
                 .cancel('取消');
             $mdDialog.show(confirm).then(function () {
-                $scope.RIselTemplate = 'base';
+                $scope.RIselTemplate = 'base(Jquery+Bootstrap)';
                 $mdDialog.show({
                     contentElement: '#reInitDialog',
                     parent: angular.element(document.body),
@@ -361,7 +361,7 @@
 
         //初始化模版
         $scope.templates = _cfg.templates;
-        $scope.selTemplate = 'base';
+        $scope.selTemplate = 'base(Jquery+Bootstrap)';
 
         //记录每次模版初始化的数量
         $scope.initCounters = {};

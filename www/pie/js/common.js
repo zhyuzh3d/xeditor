@@ -123,28 +123,36 @@ if (!_pie) var _pie = {};
 
     //APP模版,根据某个模版可以由前端自由初始化app的各个文件
     _cfg.templates = {
-        base: {
-            desc: '基本的代码派文件模版',
+        'base(Jquery+Bootstrap)': {
+            desc: '基本的代码派文件模版，包含Jquery和Bootstrap',
             files: {
-                'index.html': _global.hostUrl+'/templates/base/index.html',
-                'index.css': _global.hostUrl+'/templates/base/index.css',
-                'index.js': _global.hostUrl+'/templates/base/index.js',
+                'index.html': 'http://www.jieminuoketang.com/pie/templates/base/index.html',
+                'index.css': 'http://www.jieminuoketang.com/pie/templates/base/index.css',
+                'index.js': 'http://www.jieminuoketang.com/pie/templates/base/index.js',
             },
         },
-        angular: {
-            desc: '基本的angularJs文件模版',
+        'angular(WebApp)': {
+            desc: '基本的angularJs文件模版，可用于快速开发WebApp应用，附带wilddog野狗数据库',
             files: {
-                'index.html': _global.hostUrl+'/templates/angular/index.html',
-                'index.css': _global.hostUrl+'/templates/angular/index.css',
-                'index.js': _global.hostUrl+'/templates/angular/index.js',
+                'index.html': 'http://www.jieminuoketang.com/pie/templates/angular/index.html',
+                'index.css': 'http://www.jieminuoketang.com/pie/templates/angular/index.css',
+                'index.js': 'http://www.jieminuoketang.com/pie/templates/angular/index.js',
             },
         },
-        min: {
-            desc: '最简单的web页面模版',
+        'aframe(WebVR)': {
+            desc: '基本的aframe文件模版,可用于创建Vr应用或游戏,附带humaninput语音识别插件',
             files: {
-                'index.html': _global.hostUrl+'/templates/min/index.html',
-                'index.css': _global.hostUrl+'/templates/min/index.css',
-                'index.js': _global.hostUrl+'/templates/min/index.js',
+                'index.html': 'http://www.jieminuoketang.com/pie/templates/aframe/index.html',
+                'index.js': 'http://www.jieminuoketang.com/pie/templates/aframe/index.js',
+                'mycomponents.js': 'http://www.jieminuoketang.com/pie/templates/aframe/mycomponents.js',
+            },
+        },
+        'min(html+css+js)': {
+            desc: '最简单的web页面模版，只包含最小的html+css+js文件内容',
+            files: {
+                'index.html': 'http://www.jieminuoketang.com/pie/templates/min/index.html',
+                'index.css': 'http://www.jieminuoketang.com/pie/templates/min/index.css',
+                'index.js': 'http://www.jieminuoketang.com/pie/templates/min/index.js',
             },
         },
     };

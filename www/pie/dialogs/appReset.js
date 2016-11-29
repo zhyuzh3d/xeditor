@@ -31,7 +31,7 @@ app对象
 
         //初始化模版
         $scope.templates = _cfg.templates;
-        $scope.selTemplate = 'base';
+        $scope.selTemplate = 'base(Jquery+Bootstrap)';
 
         $scope.cancelDialog = function () {
             $mdDialog.hide();
@@ -68,7 +68,7 @@ app对象
 
         //初始化模版
         $scope.templates = _cfg.templates;
-        $scope.selTemplate = 'base';
+        $scope.selTemplate = 'base(Jquery+Bootstrap)';
 
         //记录每次模版初始化的数量
         $scope.initCounters = {};

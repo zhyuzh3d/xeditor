@@ -63,9 +63,12 @@
         });
 
 
-
         //版本历史信息
         $scope.his = [{
+            title: '增加可以用来开发VR应用或游戏的A-frame模版，附带humaninput插件可用于实现语音识别',
+            content: 'Angularjs模版也附带了wilddog野狗数据库插件可供使用',
+            time: new Date('2016-11-26 22:43'),
+         },{
             title: '自动记录文件编辑的位置，每次打开都自动恢复原来的样子',
             content: '多个文件来回切换一起编辑更方便啦！',
             time: new Date('2016-11-21 18:02'),

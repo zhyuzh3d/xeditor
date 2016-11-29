@@ -1,7 +1,6 @@
 /*提供账号相关服务的接口*/
 var _account = {};
 
-
 /**
  * 使用手机验证码注册
  * @param {string} phone 11位电话号码
@@ -106,7 +105,6 @@ _rotr.apis.acc_getUidByUkey = function () {
     });
     return co;
 };
-
 
 
 

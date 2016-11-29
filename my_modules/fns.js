@@ -263,12 +263,44 @@ function sendMail(tarmail, tit, cont) {
 };
 
 
+
+
+//从xmgc360主域获取用户uid
+_fns.getUidByCtx = function (ctx, unThrowErr) {
+    var co = $co(function* () {
+
+        //通过cookie从主服务器获取uid
+        var token = ctx.cookies.get('jwt_access_token');
+        var jwt = $jwt.safeDecode(token, _xcfg.crossSecret);
+
+        var uid = jwt ? Number(jwt.uid) : undefined;
+        if (!uid) {
+            if (unThrowErr) {
+                return undefined;
+            } else {
+                throw Error('无效的登录信息，请您手工登陆或注册.')
+            };
+        };
+
+        //是否过期
+        if (jwt.exp && new Date().getTime > Number(jwt.exp)) {
+            throw Error('登录信息已经过期，请您重新手工登录.')
+        };
+
+        return uid;
+    });
+    return co;
+};
+
+
+
+
 /**
  * 函数，通过request请求获取uid
  * @param   {ctx} ctx请求的上下文
  * @returns {uid} 用户的id
  */
-_fns.getUidByCtx = function (ctx, unThrowErr) {
+_fns.getUidByCtxOrg = function (ctx, unThrowErr) {
     var co = $co(function* () {
 
         //通过cookie从主服务器获取uid

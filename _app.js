@@ -40,7 +40,7 @@ global._captcha = require('./my_modules/captcha.js');
 global._qn = require('./my_modules/qn.js');
 
 //功能模块引入
-global._account = require('./my_modules/account.js');
+//global._account = require('./my_modules/account.js');
 global._pie = require('./my_modules/pie.js');
 global._ext = require('./my_modules/ext.js');
 global._share = require('./my_modules/share.js');
@@ -61,12 +61,13 @@ var httpsSvr = _app.httpsSvr = $https.createServer(httpsOpt, koaSvr.callback());
  */
 
 $co(function* () {
+    __infohdlr('==========', $moment(new Date()).format('YYYY-MM-DD hh:mm:ss'), '==========')
     _app.httpSvr.listen(_app.hostPort);
     yield _qn.startPrms();
     _rds.start();
     yield _mngs.startPrms();
     __infohdlr('Http server is running on:', _app.hostPort);
-    __infohdlr('------', new Date(), '------');
+    __infohdlr('-----------------------------------------');
 });
 
 
@@ -84,7 +85,7 @@ koaSvr.use($bodyParser({
 
 
 /*跨域，改为jsonp单个接口控制
-*/
+ */
 koaSvr.use($cors({
     //origin: 'http://files.10knet.com',
     credentials: true,
@@ -109,16 +110,6 @@ koaSvr.use(_ndwr);
 
 
 //test
-
-/*
-var token='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOiI3NTciLCJuYW1lIjoi5rWL6K-V5aeT5ZCNIn0.HP3quPR3RIl-cggWyFz8dANZ1B8wqYQ-Eq9df6AHgo0';
-var payload={uid:99};
-var jwt=$jwt.safeDecode(token,secret);
-var jwt2=$jwt.safeEncode(jwt, secret);
-
-console.log('>>>>jwtDE',jwt);
-console.log('>>>>jwtEN',jwt2);
-*/
 
 
 /*

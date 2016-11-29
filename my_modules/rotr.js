@@ -52,16 +52,16 @@ function* apihandler(next) {
 _rotr.apis.test = function () {
     var ctx = this;
     var co = $co(function* () {
+
+        _fns.getUidByCtx(ctx);
+
         var token = ctx.cookies.get('jwt_access_token');
         var jwt = $jwt.safeDecode(token, _xcfg.crossSecret);
-        console.log('>>>>jwt token', token);
-        console.log('>>>>jwt right', jwt);
-        console.log('>>>>jwt wrong key', $jwt.safeDecode(token, '_xcfg.crossSecret'));
-        console.log('>>>>jwt wrong fmt', $jwt.safeDecode('token', '_xcfg.crossSecret'));
 
         var resdat = {
             query: ctx.query.nick,
             body: ctx.body,
+            jwt:jwt,
         };
 
         ctx.body = __newMsg(1, 'ok', {
