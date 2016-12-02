@@ -37,10 +37,10 @@
 
         <nav class="navbar-static-top" style="background:#FFF;border-bottom:1px solid #DDD;height:48px">
             <div class="inline pull-left hidden-xs hidden-sm" ng-click='gotoHome()' style="line-height:48px;margin-right:24px;width:200px">
-                <div class="jmnktLogo2" style="margin-top:14px;margin-left:8px"></div>
+                <div class="jmnktLogo2" style="margin-top:8px;margin-left:8px"></div>
             </div>
 
-            <div class="inline pull-left hidden-sm hidden-xs" style="line-height:48px">
+            <div class="inline pull-left hidden-sm hidden-xs" style="line-height:48px" ng-hide='true'>
                 <span class="textbtn" ng-click='gotoFS()' style="margin:0 8px">入门课程(免费)</span>
                 <span class="textbtn" ng-click='gotoTor()' style="margin:0 8px">学习资源</span>
                 <span class="textbtn" ng-click='gotoPie()' style="margin:0 8px">在线编程(代码派)</span>
@@ -48,7 +48,7 @@
                 <span class="textbtn" ng-click='goto360()' style="margin:0 8px">项目工场</span>
             </div>
 
-            <div class="inline pull-left hidden-md hidden-lg" ng-show='hasLogin' style="line-height:48px;text-align:right;display:inline-block;margin-right:8px">
+            <div class="inline pull-left hidden-md hidden-lg" ng-show='hasLogin' style="line-height:48px;text-align:right;display:inline-block;margin-right:8px" ng-hide='true'>
                 <div class="dropdown">
                     <div class="dropdown-toggle" data-toggle="dropdown" style="cusor:pointer">
                         <div class="jmnktLogo2 inline" style="margin-top:14px;margin-left:8px">
@@ -86,7 +86,7 @@
                 </div>
             </div>
 
-            <div class="pull-right" ng-show='!hasLogin' style="line-height:48px;display:inline-block">
+            <div class="pull-right" ng-show='!hasLogin' style="line-height:48px;display:inline-block" ng-hide='true'>
                 <span class="textbtn" ng-click='gotoLogin()' style="margin:0 8px">登录</span>
                 <span class="textbtn" ng-click='gotoReg()' style="margin:0 8px">注册</span>
             </div>

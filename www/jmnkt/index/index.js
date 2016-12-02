@@ -57,7 +57,7 @@
             if ($scope.hasLogin) {
                 location.href = pieurl;
             } else {
-                location.href = 'http://' + location.host + '/account/?page=acc_login' + '&&okUrl=' + pieurl;
+                location.href = 'http://www.xmgc360.com/_pages/views/login.html';
             }
         };
 
@@ -66,7 +66,7 @@
             if ($scope.hasLogin) {
                 location.href = pieurl;
             } else {
-                location.href = 'http://' + location.host + '/account/?page=acc_login' + '&&okUrl=' + pieurl;
+                location.href = 'http://www.xmgc360.com/_pages/views/login.html';
             }
         };
 
@@ -76,7 +76,7 @@
             if ($scope.hasLogin) {
                 location.href = pieurl;
             } else {
-                location.href = 'http://' + location.host + '/account/?page=acc_login' + '&&okUrl=' + pieurl;
+                location.href = 'http://www.xmgc360.com/_pages/views/login.html';
             }
         };
 
@@ -85,7 +85,7 @@
             if ($scope.hasLogin) {
                 location.href = pieurl;
             } else {
-                location.href = 'http://' + location.host + '/account/?page=acc_login' + '&&okUrl=' + pieurl;
+                location.href = 'http://www.xmgc360.com/_pages/views/login.html';
             }
         };
 
@@ -95,7 +95,7 @@
         };
 
         $scope.gotoHome = function () {
-            location.href = 'http://www.jieminuoketang.com/';
+            location.href = 'http://www.xmgc360.com/';
         };
 
         $scope.gotoFS = function () {
@@ -113,17 +113,17 @@
         };
 
         $scope.gotoHome = function () {
-            location.href = 'http://' + location.host + '/';
+            location.href = 'http://www.xmgc360.com/';
         };
 
         $scope.gotoReg = function () {
             var pieurl = 'http://' + location.host + '/pie/';
-            location.href = 'http://' + location.host + '/account/?page=acc_register' + '&&okUrl=' + pieurl;
+            location.href = 'http://www.xmgc360.com/_pages/views/register.html';
         };
 
         $scope.gotoLogin = function () {
             var pieurl = 'http://' + location.host + '/pie/';
-            location.href = 'http://' + location.host + '/account/?page=acc_login' + '&&okUrl=' + pieurl;
+            location.href = 'http://www.xmgc360.com/_pages/views/login.html';
         };
 
 
