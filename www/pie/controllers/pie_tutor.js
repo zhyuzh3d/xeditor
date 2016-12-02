@@ -45,7 +45,7 @@
         };
 
         $scope.gotoProfile = function () {
-            location.href = 'http://' + location.host + '/account/?page=acc_profile';
+            location.href = _global.extUrls.profilePage;
         };
 
 
@@ -68,7 +68,7 @@
             title: '<span style="color:#ec407a">零基础，1分钟带你做闪瞎眼的Hello world!</span>',
             desc: '看1分钟视频，敲7行代码，挑战你能不能搞定编程！',
             links: [
-                ['教程链接', 'http://rtfiles.jieminuoketang.com/1/ax0uonxp39is/index.html'],
+                ['教程链接', 'http://rtapps.xmgc360.com/6256/am4l4my2851e/index.html'],
             ],
         }];
 
@@ -83,7 +83,7 @@
                 ['03.网页head能放哪些内容？(8分钟)', 'https://ke.qq.com/webcourse/index.html#course_id=156211&term_id=100178917&taid=823220676747827&vid=y1413yrugrq'],
                 ['04.网页的body能放哪些标记？(8分钟)', 'https://ke.qq.com/webcourse/index.html#course_id=156211&term_id=100178917&taid=823224971715123&vid=y1413yrugrq']
             ],
-        },{
+        }, {
             title: '<span style="color:#ec407a">CSS基础入门课程</span>',
             desc: '腾讯课堂全套Web开发技术课程，免费开放中',
             links: [
@@ -94,7 +94,7 @@
                 ['04.怎么用css做动画效果？(7分钟)', 'https://ke.qq.com/webcourse/index.html#course_id=156211&term_id=100178917&taid=823242151584307&vid=h1413wz03an'],
                 ['05.怎么加载外部的css文件？(6分钟)', 'https://ke.qq.com/webcourse/index.html#course_id=156211&term_id=100178917&taid=823246446551603&vid=x1413wpyrip']
             ],
-        },{
+        }, {
             title: '<span style="color:#ec407a;font-weight:bold">Javascript基础入门课程</span>',
             desc: '腾讯课堂全套Web开发技术课程，免费开放中',
             links: [
@@ -154,7 +154,7 @@
         var allitems = [];
         $scope.allitems = allitems;
 
-        var arrs = [['案例视频', $scope.sampleTutors], ['知识点视频', $scope.baseTutors],['文字教程资源', $scope.webTutors]];
+        var arrs = [['案例视频', $scope.sampleTutors], ['知识点视频', $scope.baseTutors], ['文字教程资源', $scope.webTutors]];
         $scope.arrs = arrs;
 
         arrs.forEach(function (list) {

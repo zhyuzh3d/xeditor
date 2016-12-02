@@ -55,7 +55,7 @@ app对象
                 );
                 if ($rootScope.tempDialogData.editAfterReset) {
                     setTimeout(function () {
-                        var str = _global.hostUrl + '/pie/?page=pie_editor&app=' + $scope.app.name;
+                        var str = _global.hostUrl + '/?page=pie_editor&app=' + $scope.app.name;
                         str = encodeURI(str);
                         location.href = str;
                     }, 1000);

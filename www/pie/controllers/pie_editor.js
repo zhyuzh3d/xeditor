@@ -49,7 +49,6 @@
             var fkey = uid + '/' + appName + '/index.css';
             $scope.openFile(cssurl, fkey, false);
 
-
         }, function () {
             return _global.hasLogin;
         });
@@ -190,6 +189,7 @@
                             for (var attr in folders) {
                                 //如果前端已经存在，那么忽略，以此保持expand等信息,如果后端已经不存在，那么前端也去除
                                 var fpath = folders[attr];
+
                                 if (!$scope.appFolders[fpath]) {
                                     newfolders[fpath] = {};
                                 } else {
@@ -240,13 +240,21 @@
                     _fns.applyScope($scope, function () {
                         var folderobj = $scope.appFolders[folderpath];
                         folderobj.items = res.data.items;
+                        //去掉下划线占位文件
+                        var arr = [];
+                        for (var i = 0; i < folderobj.items.length; i++) {
+                            if (folderobj.items[i].key != folderpath + '_') {
+                                arr.push(folderobj.items[i]);
+                            };
+                        };
+                        folderobj.items = arr;
 
                         //为每个文件添加domain和folder属性
                         folderobj.items.forEach(function (fobj) {
                             fobj.domain = res.data.domain;
                             fobj.folder = res.data.folder;
                             fobj.url = fobj.domain + fobj.key;
-                        })
+                        });
                     });
                 } else {
                     $mdToast.show(
@@ -1327,7 +1335,7 @@
         //专为实时文件地址rtfiles
         $scope.toRtfilesUrl = function (url) {
             if (!url) return '';
-            return url.replace(/^http:\/\/files/, 'http://rtfiles');
+            return url.replace(/^http:\/\/apps/, 'http://rtapps');
         };
 
         /*上传之后刷新文件,fkey带uid不带斜杠格式1/myapp/index.html，data为字符串
@@ -1437,7 +1445,7 @@
 
         //使用base.html模板
         $scope.useTemplateHtml = function () {
-            var api = 'http://www.jieminuoketang.com/pie/templates/base/index.html';
+            var api = 'http://editor.xmgc360.com/templates/base/index.html';
             $.get(api, function (res) {
                 console.log('GET', api, null, String(res).substr(0, 100));
                 _fns.applyScope($scope, function () {
@@ -1450,7 +1458,7 @@
 
         //使用base.js模板
         $scope.useTemplateJs = function () {
-            var api = 'http://www.jieminuoketang.com/pie/templates/base/index.js';
+            var api = 'http://editor.xmgc360.com/templates/base/index.js';
             $.get(api, function (res) {
                 console.log('GET', api, null, String(res).substr(0, 100));
                 _fns.applyScope($scope, function () {
@@ -1725,7 +1733,7 @@
                 console.log('POST', api, dat, res);
                 if (res.code == 1) {
                     _fns.applyScope($scope, function () {
-                        var conf = $scope.pieConfig = res.data;
+                        var conf = $scope.pieConfig = res.data || {};
 
                         //更新各种设置
                         if (conf.showSaveConfirm !== undefined) {

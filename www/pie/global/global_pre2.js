@@ -6,13 +6,13 @@ if (!_global) var _global = {};
 (function () {
     'use strict';
 
-    //全局设置，所有的路径结尾都不带斜杠,自动匹配10knet和jieminuoketang
+    //全局设置，所有的路径结尾都不带斜杠,自动匹配10knet和editor.xmgc360
     if (/^\w*\.10knet\.com$/.test(location.host)) {
         _global.host = 'www.10knet.com';
         _global.hostUrl = 'http://www.10knet.com';
-    } else if (/^\w*\.jieminuoketang\.com$/.test(location.host)) {
-        _global.host = 'www.jieminuoketang.com';
-        _global.hostUrl = 'http://www.jieminuoketang.com';
+    } else if (/^\w*\.xmgc360\.com$/.test(location.host)) {
+        _global.host = 'editor.xmgc360.com';
+        _global.hostUrl = 'http://editor.xmgc360.com';
     }
     _global.apiPrefix = _global.hostUrl + '/api';
 
@@ -41,17 +41,20 @@ if (!_global) var _global = {};
         return _global.apiPrefix + '/' + str;
     };
 
+
     //先检查是否登陆，没有登陆的话直接跳往登陆注册页面
     _global.chkLogin = function () {
         var api = _global.api('acc_getMyInfo');
+        //var api = 'http://www.xmgc360.com/project/index.php/api/user/getinfo';
         var dat = {};
 
         $.post(api, dat, function (res) {
-
+            console.log('>POST', api, dat, res);
             if (res.code == 1) {
                 //已经登陆，把数据填充到用户
                 _global.myUsrInfo = res.data;
                 _global.hasLogin = true;
+
             } else {
                 var jumptype = 2; //跳转类型,0不跳转，1直接跳转，2跳转到注册欢迎页面
 

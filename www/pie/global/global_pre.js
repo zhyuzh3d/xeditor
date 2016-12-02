@@ -24,7 +24,7 @@ if (!_global) var _global = {};
     if (!jQuery) return;
 
     //修改标题
-    $('title').html('杰米诺 | ' + $('title').html());
+    $('title').html('项目工场 | ' + $('title').html());
 
 
 })();
@@ -41,60 +41,119 @@ if (!_global) var _global = {};
         return _global.apiPrefix + '/' + str;
     };
 
+    _global.extUrls = {
+        getMyInfo: 'http://www.xmgc360.com/project/index.php/api/user/getinfo',
+        profilePage: 'http://www.xmgc360.com//_pages/views/settings.html',
+        logout: 'http://www.xmgc360.com/project/index.php/api/user/logout',
+        loginPage: 'http://www.xmgc360.com/_pages/views/login.html',
+        regPage: 'http://www.xmgc360.com/_pages/views/register.html',
+    };
+
+    //ajax增强$.post，支持跨域请求
+    $.post2 = function (api, dat, okfn, errfn) {
+        $.ajax({
+            type: "POST",
+            url: api,
+            data: dat,
+            dataType: 'json',
+            xhrFields: {
+                withCredentials: true
+            },
+            success: okfn,
+            error: errfn,
+        });
+    };
+
+
     //先检查是否登陆，没有登陆的话直接跳往登陆注册页面
     _global.chkLogin = function () {
-        var api = _global.api('acc_getMyInfo');
+
+        //先请求www的用户信息
+        var api = _global.extUrls.getMyInfo;
         var dat = {};
 
-        $.post(api, dat, function (res) {
 
+        $.post2(api, dat, function (res) {
+            console.log('POST', api, dat, res);
             if (res.code == 1) {
                 //已经登陆，把数据填充到用户
-                _global.myUsrInfo = res.data;
-                _global.hasLogin = true;
+                var wwwinfo = res.data;
+
+                //再请求editor的用户信息
+                var api2 = _global.api('acc_getMyInfo');
+
+                $.post2(api2, dat, function (res2) {
+                    console.log('POST', api2, dat, res2);
+                    if (res.code == 1) {
+                        _global.myUsrInfo = res2.data;
+                        _global.hasLogin = true;
+
+                        //修正必要的字段
+                        wwwinfo.color = '#00BFA5';
+                        wwwinfo.phone = '00000000000';
+                        wwwinfo.avatar = wwwinfo.thum;
+                        wwwinfo.nick = wwwinfo.name;
+
+                        //合并wwwinfo的用户数据
+                        for (var attr in wwwinfo) {
+                            _global.myUsrInfo[attr] = wwwinfo[attr];
+                        };
+
+                    } else {
+                        location.href = _global.extUrls.loginPage;
+                    }
+                });
             } else {
-                var jumptype = 2; //跳转类型,0不跳转，1直接跳转，2跳转到注册欢迎页面
-
-                var indomain = (location.host == _global.host);
-                var url = location.href.replace(/[\/]+/g, '/'); //去掉可能存在的双斜杠，http://也会变http:/
-                var urlarr = url.split('/');
-
-                if (indomain) {
-                    //www域名下,mod模块名称
-                    var modname = urlarr[2] || '';
-
-                    //page参数名称
-                    var pagestr = url.match(/page=[\w\d_]+/g) || [''];
-                    var pagename = pagestr[0].split('=')[1];
-
-                    //登陆页不跳转
-                    var accnojump = ['acc_login', 'acc_register', 'acc_changePw', 'acc_temp'];
-                    if (modname == 'account' && accnojump.indexOf(pagename) != -1) {
-                        jumptype = 0;
-                    };
-
-                    //首页不跳转
-                    var homeregx = /^(index[\.\d\w]*)*(\?[\d\w\_]*=[\d\w\_]*)*$/;
-                    if (homeregx.test(modname)) jumptype = 0;
-                } else {
-                    //其他情况files域名下都采用弹窗提示，不强制注册
-                    jumptype = 2;
-                };
-
-                if (jumptype == 1) {
-                    //跳转目标，传递okUrl参数
-                    var tourl = _global.hostUrl + '/account/?page=acc_login&okUrl=';
-                    tourl += encodeURI(location.href);
-                    window.location.href = tourl;
-                } else if (jumptype == 2) {
-                    //跳转目标，传递okUrl参数
-                    var tourl = _global.hostUrl + '/account/welcome.html?&okUrl=';
-                    tourl += encodeURI(location.href);
-                    window.location.href = tourl;
-                };
+                location.href = _global.extUrls.loginPage;
             };
-        }, 'jsonp');
+        });
     };
+
+    //非登录自动跳转函数
+    _global.jumpToLogin = function () {
+        var jumptype = 2; //跳转类型,0不跳转，1直接跳转，2跳转到注册欢迎页面
+
+        var indomain = (location.host == _global.host);
+        var url = location.href.replace(/[\/]+/g, '/'); //去掉可能存在的双斜杠，http://也会变http:/
+        var urlarr = url.split('/');
+
+        if (indomain) {
+            //www域名下,mod模块名称
+            var modname = urlarr[2] || '';
+
+            //page参数名称
+            var pagestr = url.match(/page=[\w\d_]+/g) || [''];
+            var pagename = pagestr[0].split('=')[1];
+
+            //登陆页不跳转
+            var accnojump = ['acc_login', 'acc_register', 'acc_changePw', 'acc_temp'];
+            if (modname == 'account' && accnojump.indexOf(pagename) != -1) {
+                jumptype = 0;
+            };
+
+            //首页不跳转
+            var homeregx = /^(index[\.\d\w]*)*(\?[\d\w\_]*=[\d\w\_]*)*$/;
+            if (homeregx.test(modname)) jumptype = 0;
+        } else {
+            //其他情况files域名下都采用弹窗提示，不强制注册
+            jumptype = 2;
+        };
+
+        if (jumptype == 1) {
+            //跳转目标，传递okUrl参数
+            var tourl = _global.hostUrl + '/account/?page=acc_login&okUrl=';
+            tourl += encodeURI(location.href);
+            window.location.href = tourl;
+        } else if (jumptype == 2) {
+            //跳转目标，传递okUrl参数
+            var tourl = _global.hostUrl + '/account/welcome.html?&okUrl=';
+            tourl += encodeURI(location.href);
+            window.location.href = tourl;
+        };
+    };
+
+
+
 
     //如果非匿名anon模式就自动获取用户信息
     (function () {
@@ -113,10 +172,11 @@ if (!_global) var _global = {};
     //注销账号
     _global.logout = function (okfn) {
         //注销当前账号
-        var api = _global.api('acc_loginOut');
+        //var api = _global.api('acc_loginOut');
+        var api = _global.extUrls.logout;
         var dat = {};
 
-        $.post(api, dat, function (res) {
+        $.post2(api, dat, function (res) {
             console.log('POST', api, dat, res);
             if (res.code == 1) {
                 _global.myUsrInfo = undefined;
@@ -176,8 +236,6 @@ if (!_global) var _global = {};
             }
         }, interval);
     };
-
-
 
 
 })();

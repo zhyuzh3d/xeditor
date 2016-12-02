@@ -21,18 +21,18 @@
         $scope.name = thisName;
 
         $scope.menus = [{
-            name: '我创建的APP',
+            name: '我的编程',
             icon: 'fa fa-code',
             ctrlr: 'pie_welcome',
         }, {
-            name: 'TOP排行榜',
+            name: '最热排行',
             icon: 'fa fa-trophy',
             ctrlr: 'pie_ladder',
         }, {
             name: '我的收藏',
             icon: 'fa fa-heart',
             ctrlr: 'pie_favors',
-        },{
+        }, {
             name: '我的成就',
             icon: 'fa fa-area-chart',
             ctrlr: 'pie_achieve',
@@ -49,13 +49,9 @@
             icon: 'fa fa-chain',
             ctrlr: 'pie_links',
         }, {
-            name: 'What\'s New',
+            name: '最近更新',
             icon: 'fa fa-bomb',
             ctrlr: 'pie_history',
-        }, {
-            name: '关于我们',
-            icon: 'fa fa-smile-o',
-            ctrlr: 'pie_about',
         }];
 
 
@@ -80,7 +76,7 @@
 
         $scope.goHome = function () {
             $rootScope.tagLeftMenu();
-            window.location.href = _global.hostUrl;
+            window.location.href = 'http://www.xmgc360.com';
         };
 
 

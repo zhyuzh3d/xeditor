@@ -278,11 +278,11 @@ _fns.addDialogJs('appReset');
         $scope.updateAppExt = function () {
             var dat = {
                 appId: $scope.app.id,
-                wildDogAppSecret: $scope.appExt.wildDogAppSecret,
             };
+            $scope.appExt ? dat.wildDogAppSecret = $scope.appExt.wildDogAppSecret : undefined;
 
-            //格式检查
-            var errstr;
+                //格式检查
+                var errstr;
             if (dat.wildDogAppSecret && !_cfg.regx.wildDogAppSecret.test(dat.wildDogAppSecret)) {
                 errstr = '野狗APP超级密钥格式错误';
             };

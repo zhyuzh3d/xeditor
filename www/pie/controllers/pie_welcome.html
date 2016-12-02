@@ -72,15 +72,15 @@
             </a>
 
             <div class="pull-right" ng-show='!hasLogin' style="line-height:48px;display:inline-block">
-                <a href="http://www.jieminuoketang.com/account/?page=acc_login" style="margin:0 8px;text-decoration:none;">登录</a>
-                <a href="http://www.jieminuoketang.com/account/?page=acc_register" style="margin:0 8px;text-decoration:none;">注册</a>
+                <a ng-href="{{$root.extUrls.loginPage}}" style="margin:0 8px;text-decoration:none;">登录</a>
+                <a ng-href="{{$root.extUrls.regPage}}" style="margin:0 8px;text-decoration:none;">注册</a>
             </div>
 
 
             <div class="dropdown pull-right" ng-show='hasLogin' style="margin-top:8px">
                 <button class="dropdown-toggle" id="ddmenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background:none;border:none">
                     <span>
-                        <img class='avatar-md' ng-src='{{myUsrInfo.avatar?myUsrInfo.avatar+"-avatar32":""}}' />
+                        <img class='avatar-md' ng-src='{{myUsrInfo.avatar?myUsrInfo.avatar:""}}' />
                     </span>
                     <span class="caret"></span>
                 </button>
@@ -96,10 +96,10 @@
                 <div style="text-align:center">～这里空空如也，立即创建自己的APP吧～</div>
                 <br>
                 <md-card style='position:relative' style='margin:12px 0'>
-                    <a href="http://rtfiles.jieminuoketang.com/1/ax0uonxp39is/index.html" target="_blank">
+                    <a href="http://rtapps.xmgc360.com/6256/am4l4my2851e/index.html" target="_blank">
                         <img src='http://files.jieminuoketang.com/1/aaw6vsns2i5k/src/tutorBg.jpeg' width="100%">
                     </a>
-                    <md-button class="md-raised md-accent" aria-label='a' style='position: absolute; padding: 4px 24px;left: 2%;bottom: 10%;font-size:18px' ng-click='gotoLink("http://rtfiles.jieminuoketang.com/1/ax0uonxp39is/index.html")'>
+                    <md-button class="md-raised md-accent" aria-label='a' style='position: absolute; padding: 4px 24px;left: 2%;bottom: 10%;font-size:18px' ng-click='gotoLink("http://rtapps.xmgc360.com/6256/am4l4my2851e/index.html")'>
                         <span class="fa fa-play-circle fa-lg"></span>
                         <span>零基础，1分钟，7行代码，点这里马上开始！</span>
                     </md-button>
@@ -128,19 +128,19 @@
 
                     <!--   下拉菜单-->
                     <md-card-actions layout-wrap layout="row" layout-align="end center" style='color:#AAA'>
-                        <div flex='none' class="md-button md-icon-button itbtn" ng-click='$root.shareApp(item.info)' aria-label='a' style='color:#00bfa5;margin:0;padding:4px;width:36px;height:36px' data-toggle="tooltip" data-placement="bottom" title="分享到QQ微信微博">
+                        <div flex='none' class="md-button md-icon-button itbtn md-primary" ng-click='$root.shareApp(item.info)' aria-label='a' style='margin:0;padding:4px;width:36px;height:36px' data-toggle="tooltip" data-placement="bottom" title="分享到QQ微信微博">
                             <span class='fa fa-share-alt'></span>
                         </div>
 
-                        <div flex='none' class=" md-button md-icon-button itbtn" ng-click='openApp(item.key)' aria-label='a' style='color:#00bfa5;margin:0;padding:4px;width:36px;height:36px' data-toggle="tooltip" data-placement="bottom" title="运行App主页">
+                        <div flex='none' class=" md-button md-icon-button itbtn md-primary" ng-click='openApp(item.key)' aria-label='a' style='margin:0;padding:4px;width:36px;height:36px' data-toggle="tooltip" data-placement="bottom" title="运行App主页">
                             <span class='fa fa-rocket'></span>
                         </div>
 
-                        <div flex='none' class="md-button md-icon-button itbtn" ng-click='editApp(item.key)' aria-label='a' style='color:#00bfa5;margin:0;padding:4px;width:36px;height:36px' data-toggle="tooltip" data-placement="bottom" title="编辑App代码">
+                        <div flex='none' class="md-button md-icon-button itbtn md-primary" ng-click='editApp(item.key)' aria-label='a' style='margin:0;padding:4px;width:36px;height:36px' data-toggle="tooltip" data-placement="bottom" title="编辑App代码">
                             <span class='fa fa-pencil'></span>
                         </div>
 
-                        <div flex='none' class="md-button md-icon-button itbtn" ng-click='openConfigDialog(item.info)' aria-label='a' style='color:#00bfa5;margin:0;padding:4px;width:36px;height:36px' data-toggle="tooltip" data-placement="bottom" title="打开设置窗口">
+                        <div flex='none' class="md-button md-icon-button itbtn md-primary" ng-click='openConfigDialog(item.info)' aria-label='a' style='margin:0;padding:4px;width:36px;height:36px' data-toggle="tooltip" data-placement="bottom" title="打开设置窗口">
                             <span class='fa fa-bars'></span>
                         </div>
 
@@ -167,7 +167,7 @@
                                 </md-select>
                                 <div style='color:#AAA;text-align:left;font-size:12px' ng-bind="templates[selTemplate].desc"></div>
                             </md-input-container>
-                            <md-input-container class="md-block" flex-gt-sm style='margin-top:48px'>
+                            <md-input-container class="md-block" flex-gt-sm style='margin-top:48px' ng-hide='true'>
                                 <label style="text-align:left;font-size:2rem">APP标识名</label>
                                 <input name='name' ng-model="newApp.name" ng-pattern="/^[a-zA-Z]+[0-9a-zA-Z]{2,31}$/" style='font-size:2rem;font-family:simhei' />
                                 <div style='color:#AAA;text-align:left;font-size:12px'>字母和数字，3~32位非数字开头。不可重名，设定后不可修改</div>
@@ -210,7 +210,7 @@
     </div>
     <!--    页脚内容-->
     <div flex class="container" style="margin:5rem 1rem 10rem 2rem">
-        <small style="color:#AAA">Create by zhyuzh</small>
+        <small style="color:#AAA">Powered by xmgc360.com</small>
     </div>
 </div>
 

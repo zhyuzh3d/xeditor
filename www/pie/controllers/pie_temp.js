@@ -355,7 +355,7 @@
         };
 
         $scope.gotoProfile = function () {
-            location.href = 'http://' + location.host + '/account/?page=acc_profile';
+            location.href = _global.extUrls.profilePage;
         };
 
 
@@ -455,12 +455,6 @@
                 };
             });
         };
-
-
-
-
-
-
 
 
 

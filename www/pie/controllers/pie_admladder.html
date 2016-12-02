@@ -22,10 +22,16 @@
             </md-button>
             <md-button class="md-raised md-primary" ng-click='getListData()' aria-label='a' style='color:#FFF'>刷新列表</md-button>
 
+
+            <div class="pull-right" ng-show='!hasLogin' style="line-height:48px;display:inline-block">
+                <a ng-href="{{$root.extUrls.loginPage}}" style="margin:0 8px;text-decoration:none;">登录</a>
+                <a ng-href="{{$root.extUrls.regPage}}" style="margin:0 8px;text-decoration:none;">注册</a>
+            </div>
+
             <div class="dropdown pull-right" ng-show='hasLogin' style="margin-top:8px">
                 <button class="dropdown-toggle" id="ddmenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="background:none;border:none">
                     <span>
-                        <img class='avatar-md' ng-src='{{myUsrInfo.avatar?myUsrInfo.avatar+"-avatar32":""}}' />
+                        <img class='avatar-md' ng-src='{{myUsrInfo.avatar?myUsrInfo.avatar:""}}' />
                     </span>
                     <span class="caret"></span>
                 </button>

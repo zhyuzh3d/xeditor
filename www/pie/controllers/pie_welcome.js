@@ -92,7 +92,7 @@
 
         //跳转到App首页
         $scope.editApp = function (appname) {
-            var str = _global.hostUrl + '/pie/?page=pie_editor&app=' + appname;
+            var str = _global.hostUrl + '/?page=pie_editor&app=' + appname;
             str = encodeURI(str);
             location.href = str;
         };
@@ -355,7 +355,7 @@
         };
 
         $scope.gotoProfile = function () {
-            location.href = 'http://' + location.host + '/account/?page=acc_profile';
+            location.href = _global.extUrls.profilePage;
         };
 
 

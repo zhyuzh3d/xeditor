@@ -16,6 +16,7 @@ _rotr.post('api', '/api/:apiname', apihandler);
 各个api处理函数用promise衔接,return传递ctx
 */
 _rotr.apis = {};
+_rotr.apis_bak = {};
 
 /*处理Api请求
 默认tenk的api直接使用

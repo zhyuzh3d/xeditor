@@ -40,7 +40,7 @@ global._captcha = require('./my_modules/captcha.js');
 global._qn = require('./my_modules/qn.js');
 
 //功能模块引入
-//global._account = require('./my_modules/account.js');
+global._account = require('./my_modules/account.js');
 global._pie = require('./my_modules/pie.js');
 global._ext = require('./my_modules/ext.js');
 global._share = require('./my_modules/share.js');

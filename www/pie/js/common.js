@@ -50,8 +50,8 @@ if (!_pie) var _pie = {};
 
     _cfg.defaultIconSm = 'http://files.jieminuoketang.com/1/aaw6vsns2i5k/src/defaultIcon128.png';
     _cfg.defaultIconLg = 'http://rtfiles.jieminuoketang.com/1/aaw6vsns2i5k/src/defaultIcon512.png';
-    _cfg.defaultAvatarSm = 'http://files.jieminuoketang.com/1/aaw6vsns2i5k/src/defaultIcon128.png';
-    _cfg.defaultAvatarLg = 'http://rtfiles.jieminuoketang.com/1/aaw6vsns2i5k/src/defaultIcon512.png';
+    _cfg.defaultAvatarSm = 'http://www.xmgc360.com/_imgs/thumtemp.jpg';
+    _cfg.defaultAvatarLg = 'http://www.xmgc360.com/_imgs/thumtemp.jpg';
 
 
     //七牛文件上传接口设定
@@ -126,33 +126,33 @@ if (!_pie) var _pie = {};
         'base(Jquery+Bootstrap)': {
             desc: '基本的代码派文件模版，包含Jquery和Bootstrap',
             files: {
-                'index.html': 'http://www.jieminuoketang.com/pie/templates/base/index.html',
-                'index.css': 'http://www.jieminuoketang.com/pie/templates/base/index.css',
-                'index.js': 'http://www.jieminuoketang.com/pie/templates/base/index.js',
+                'index.html': 'http://editor.xmgc360.com/templates/base/index.html',
+                'index.css': 'http://editor.xmgc360.com/templates/base/index.css',
+                'index.js': 'http://editor.xmgc360.com/templates/base/index.js',
             },
         },
         'angular(WebApp)': {
             desc: '基本的angularJs文件模版，可用于快速开发WebApp应用，附带wilddog野狗数据库',
             files: {
-                'index.html': 'http://www.jieminuoketang.com/pie/templates/angular/index.html',
-                'index.css': 'http://www.jieminuoketang.com/pie/templates/angular/index.css',
-                'index.js': 'http://www.jieminuoketang.com/pie/templates/angular/index.js',
+                'index.html': 'http://editor.xmgc360.com/templates/angular/index.html',
+                'index.css': 'http://editor.xmgc360.com/templates/angular/index.css',
+                'index.js': 'http://editor.xmgc360.com/templates/angular/index.js',
             },
         },
         'aframe(WebVR)': {
             desc: '基本的aframe文件模版,可用于创建Vr应用或游戏,附带humaninput语音识别插件',
             files: {
-                'index.html': 'http://www.jieminuoketang.com/pie/templates/aframe/index.html',
-                'index.js': 'http://www.jieminuoketang.com/pie/templates/aframe/index.js',
-                'mycomponents.js': 'http://www.jieminuoketang.com/pie/templates/aframe/mycomponents.js',
+                'index.html': 'http://editor.xmgc360.com/templates/aframe/index.html',
+                'index.js': 'http://editor.xmgc360.com/templates/aframe/index.js',
+                'mycomponents.js': 'http://editor.xmgc360.com/templates/aframe/mycomponents.js',
             },
         },
         'min(html+css+js)': {
             desc: '最简单的web页面模版，只包含最小的html+css+js文件内容',
             files: {
-                'index.html': 'http://www.jieminuoketang.com/pie/templates/min/index.html',
-                'index.css': 'http://www.jieminuoketang.com/pie/templates/min/index.css',
-                'index.js': 'http://www.jieminuoketang.com/pie/templates/min/index.js',
+                'index.html': 'http://editor.xmgc360.com/templates/min/index.html',
+                'index.css': 'http://editor.xmgc360.com/templates/min/index.css',
+                'index.js': 'http://editor.xmgc360.com/templates/min/index.js',
             },
         },
     };
@@ -161,11 +161,11 @@ if (!_pie) var _pie = {};
     _cfg.shareTemplates = {
         achieve: {
             id: 1,
-            url: _global.hostUrl+'/templates/share/achieve.html'
+            url: _global.hostUrl + '/templates/share/achieve.html'
         },
         app: {
             id: 2,
-            url: _global.hostUrl+'/pie/templates/share/app.html'
+            url: _global.hostUrl + '/templates/share/app.html'
         },
     };
 
@@ -261,6 +261,7 @@ if (!_pie) var _pie = {};
 
 
 
+
     /**
      * 检查是否是日期格式数据
      * @param   {object} o 被检查对象
@@ -275,6 +276,18 @@ if (!_pie) var _pie = {};
     _fns.getMimeByExt = function (ext) {
         ext = ext.replace('.', '');
         return _cfg.mimeTypes[ext];
+    };
+
+    //合并两个object属性
+    _fns.mergeObjs = function () {
+        var obj = {};
+        for (var i = 0; i < arguments.length; i++) {
+            var item = arguments[i];
+            for (var attr in item) {
+                obj[attr] = item[attr];
+            };
+        };
+        return obj;
     };
 
 
@@ -435,6 +448,7 @@ if (!_pie) var _pie = {};
         return null;
     }
 
+
     /*获取地址栏全部参数
      */
     _fns.getUrlParams = function (url) {
@@ -442,6 +456,12 @@ if (!_pie) var _pie = {};
         url = (url) ? url : window.location.href;
         url = String(url);
         //var parts = unescape(url).split('?');
+
+        //去掉井号
+        var sharppos = url.indexOf('#');
+        sharppos ? url = url.substr(0, url.indexOf('#')) : '';
+
+        //分割出参数
         var parts = url.split('?');
         if (parts.length > 1) {
             var arr = parts[1].split('&');

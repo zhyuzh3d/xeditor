@@ -8,7 +8,7 @@ var _account = {};
  * @param {string} pw 32位Md5加密密码
  * @returns {usrObj} 用户对象
  */
-_rotr.apis.acc_regByPhone = function () {
+_rotr.apis_bak.acc_regByPhone = function () {
     var ctx = this;
 
     var co = $co(function* () {
@@ -70,7 +70,7 @@ _rotr.apis.acc_regByPhone = function () {
  * 支持url的ukey参数或post数据的ukey,或者cookie
  * @returns {int} 用户id
  */
-_rotr.apis.acc_getUidByUkey = function () {
+_rotr.apis_bak.acc_getUidByUkey = function () {
     var ctx = this;
 
     var co = $co(function* () {
@@ -121,6 +121,55 @@ _rotr.apis.acc_getMyInfo = function () {
 
         var msg;
 
+        var uid = yield _fns.getUidByCtx(ctx);
+
+
+
+        //未登录情况,清除ukey并返回错误
+        if (!uid) {
+            ukey = undefined;
+            ctx.cookies.set('m_ukey', ukey, {
+                httpOnly: true,
+                expires: new Date((new Date()).getTime() + _cfg.dur.browserUkey),
+            });
+            throw Error('错误或无效的登录信息，请您手工登陆或注册.')
+        }
+
+        //异步记录访问时间
+        _rds.cli.hset(_rds.k.usr(uid), 'lasttime', (new Date()).getTime());
+
+        //读取用户全部信息，仅返回部分安全信息
+        //读取用户全部信息，仅返回部分安全信息
+        var dbusr = yield _ctnu([_rds.cli, 'hgetall'], _rds.k.usr(uid));
+        if (!dbusr) throw Error('获取用户数据信息失败.');
+
+        var dat = {
+            id: dbusr.id,
+            codeChanges: dbusr.codeChanges,
+            codeLength: dbusr.codeLength,
+            lasttime: dbusr.lasttime,
+        };
+
+        ctx.body = __newMsg(1, 'ok', dat);
+        return ctx;
+    });
+    return co;
+};
+
+
+
+
+
+
+
+_rotr.apis_bak.acc_getMyInfo = function () {
+    var ctx = this;
+    ctx.enableJsonp = true;
+
+    var co = $co(function* () {
+
+        var msg;
+
         //检测是否存在账号ukey，
         var ukey = ctx.cookies.get('m_ukey');
         if (!ukey) throw Error('没找到您的登录信息，请重新登陆或注册.');
@@ -163,7 +212,7 @@ _rotr.apis.acc_getMyInfo = function () {
  * 保存用户自己信息的接口,根据cookie里面的m_ukey判断
  * @returns {null}
  */
-_rotr.apis.acc_saveProfile = function () {
+_rotr.apis_bak.acc_saveProfile = function () {
     var ctx = this;
 
     var co = $co(function* () {
@@ -230,7 +279,7 @@ _rotr.apis.acc_saveProfile = function () {
  * @returns {usrObj} 用户基本信息
  */
 
-_rotr.apis.acc_loginByPhone = function () {
+_rotr.apis_bak.acc_loginByPhone = function () {
     var ctx = this;
 
     var co = $co(function* () {
@@ -309,7 +358,7 @@ _account.acc_getUsrInfoCo = function (uid) {
  * 注销账号，只是把浏览器的m_ukey清空
  * @returns {null}
  */
-_rotr.apis.acc_loginOut = function () {
+_rotr.apis_bak.acc_loginOut = function () {
     var ctx = this;
 
     var co = $co(function* () {
@@ -341,7 +390,7 @@ _rotr.apis.acc_loginOut = function () {
  * @returns {null} null
  */
 
-_rotr.apis.acc_getPhoneRegCode = function () {
+_rotr.apis_bak.acc_getPhoneRegCode = function () {
     var ctx = this;
 
     var co = $co(function* () {
@@ -386,7 +435,7 @@ _rotr.apis.acc_getPhoneRegCode = function () {
  * @returns {null} null
  */
 
-_rotr.apis.acc_getPhoneRstCode = function () {
+_rotr.apis_bak.acc_getPhoneRstCode = function () {
     var ctx = this;
 
     var co = $co(function* () {
@@ -428,7 +477,7 @@ _rotr.apis.acc_getPhoneRstCode = function () {
  * 重置密码，使用手机号码验证码重置,成功并自动登陆
  * @returns {null} 无，前端可单独请求getMyInfo接口获取信息
  */
-_rotr.apis.acc_rstPwByPhone = function () {
+_rotr.apis_bak.acc_rstPwByPhone = function () {
     var ctx = this;
 
     var co = $co(function* () {
@@ -600,7 +649,7 @@ _account.acc_sendPhoneCodeCo = function (phone, capKey, capVal) {
  * admin，获取用户列表,
  * @returns {} hgetall读取_map:usr.phone:usr.id键，全部返回给前端
  */
-_rotr.apis.acc_admGetUsrList = function () {
+_rotr.apis_bak.acc_admGetUsrList = function () {
     var ctx = this;
 
     var co = $co(function* () {
@@ -622,7 +671,7 @@ _rotr.apis.acc_admGetUsrList = function () {
  * admin，获取单个用户详细信息,
  * @returns {} hgetall读取usr-4键和uApps-4，全部返回给前端
  */
-_rotr.apis.acc_admGetUsrDetails = function () {
+_rotr.apis_bak.acc_admGetUsrDetails = function () {
     var ctx = this;
 
     var co = $co(function* () {
@@ -656,7 +705,7 @@ _rotr.apis.acc_admGetUsrDetails = function () {
  * id,key,val
  * @returns {}
  */
-_rotr.apis.acc_admSetUsrAttr = function () {
+_rotr.apis_bak.acc_admSetUsrAttr = function () {
     var ctx = this;
 
     var co = $co(function* () {
@@ -689,7 +738,7 @@ _rotr.apis.acc_admSetUsrAttr = function () {
  * id
  * @returns {}
  */
-_rotr.apis.acc_admRemoveUsr = function () {
+_rotr.apis_bak.acc_admRemoveUsr = function () {
     var ctx = this;
 
     var co = $co(function* () {

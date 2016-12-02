@@ -46,7 +46,7 @@
         };
 
         $scope.gotoProfile = function () {
-            location.href = 'http://' + location.host + '/account/?page=acc_profile';
+            location.href = _global.extUrls.profilePage;
         };
 
         //开始就打开左侧栏
@@ -128,7 +128,7 @@
                     length: 0,
                     changes: 0
                 };
-                console.log('>>>>',ymdate);
+                console.log('>>>>', ymdate);
 
             };
 
@@ -154,7 +154,7 @@
                             length: 0,
                             changes: 0
                         };
-                        console.log('>>>XX',daysdata[ymdstr]);
+                        console.log('>>>XX', daysdata[ymdstr]);
                     };
 
                     daysdata[ymdstr].changes += Number(his.param.changes);
@@ -346,7 +346,7 @@
                     };
                     _fns.createSharePage('achieve', shareObj, function (shareurl) {
                         $rootScope.tempDialogData = {
-                            title: '我在杰米诺课堂学编程，来看看我的成就吧！',
+                            title: '我在项目工场学编程，来看看我的成就吧！',
                             url: shareurl,
                         };
                         $mdDialog.show({

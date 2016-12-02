@@ -42,7 +42,7 @@ var _app = {}; //最高全局变量，angular
         //material design theme主题颜色定制
         $mdThemingProvider.alwaysWatchTheme(true);
         $mdThemingProvider.theme('default')
-            .primaryPalette('teal', {
+            .primaryPalette('cyan', {
                 'default': 'A700'
             })
             .accentPalette('pink', {
@@ -67,6 +67,7 @@ var _app = {}; //最高全局变量，angular
 
         $rootScope._fns = _fns;
         $rootScope._cfg = _cfg;
+        $rootScope.extUrls = _global.extUrls;
 
         //把rootscope记录到xdat
         $rootScope.xargs = {
@@ -136,7 +137,7 @@ var _app = {}; //最高全局变量，angular
         //通用的分享app函数
         $rootScope.shareApp = function (appinfo, opendialog) {
             var fn;
-            if (appinfo) appinfo.pkey = undefined;//隐藏作者的私人字段
+            if (appinfo) appinfo.pkey = undefined; //隐藏作者的私人字段
             if (opendialog !== false) {
                 fn = function (shareurl) {
                     $rootScope.tempDialogData = {
@@ -217,22 +218,39 @@ var _app = {}; //最高全局变量，angular
             })
         });
 
+        //等待global读取账号信息成功后刷新右上角用户
+        _global.promiseRun(function () {
+            $rootScope.$apply(function () {
+                $rootScope.myInfo = _global.myUsrInfo;
+            });
+        }, function () {
+            return _global.hasLogin;
+        });
+
+
+
+
 
         //自动登陆获取自己信息记录到$root
+        //此处废止，改到golbal_pre统一处理
         $rootScope.getMyInfo = function () {
             var api = _global.api('acc_getMyInfo');
             var dat = {};
 
+            var editorinfo = {};
+            var wwwinfo = {};
+
+            //读取editor服务器的信息
             $.post(api, dat, function (res) {
                 console.log('POST', api, dat, res);
                 if (res.code == 1) {
-                    $rootScope.myInfo = res.data;
+                    editorinfo = res.data;
+                    $rootScope.myInfo = _fns.mergeObjs(editorinfo, wwwinfo);
                     //如果地址栏中有_anonymous=true匿名登录字段，那么去掉并跳转
                     var url = location.href;
                     if (url.indexOf('_anonymous=true') != -1) {
                         location.href = url.replace('_anonymous=true', '');
                     };
-
                 } else {
                     //提示错误
                     $mdToast.show(
@@ -243,8 +261,9 @@ var _app = {}; //最高全局变量，angular
                     );
                 };
             });
+
         };
-        $rootScope.getMyInfo();
+        //$rootScope.getMyInfo();
     };
 
     //filter：显示为html样式

@@ -45,7 +45,7 @@
         };
 
         $scope.gotoProfile = function () {
-            location.href = 'http://' + location.host + '/account/?page=acc_profile';
+            location.href = _global.extUrls.profilePage;
         };
 
 
@@ -153,7 +153,7 @@
         $scope.apis = [{
             name: 'acc_getMyInfo',
             desc: '用于获取用户自身的基本信息',
-            path: 'http://www.jieminuoketang.com/api/acc_getMyInfo',
+            path: 'http://editor.xmgc360.com/api/acc_getMyInfo',
             method: 'POST,GET',
             reqdata: undefined,
             reqdesc: undefined,
@@ -172,7 +172,7 @@
         }, {
             name: 'ext_getWildDogCustomToken',
             desc: '用于获取野狗APP用户账户识别的自定义customToken',
-            path: 'http://www.jieminuoketang.com/api/ext_getWildDogCustomToken',
+            path: 'http://editor.xmgc360.com/api/ext_getWildDogCustomToken',
             method: 'POST,GET',
             reqdata: undefined,
             reqdesc: undefined,
@@ -190,7 +190,7 @@
         }, {
             name: 'ext_httpProxy',
             desc: '代理转发各种第三方API接口功能',
-            path: 'http://www.jieminuoketang.com/api/ext_httpProxy',
+            path: 'http://editor.xmgc360.com/api/ext_httpProxy',
             method: 'POST,GET',
             reqdata: {
                 type: 'http',
@@ -233,28 +233,28 @@
                 code: '<script src="https://cdn.wilddog.com/sdk/js/2.1.2/wilddog.js"></script>\n<script src="https://cdn.wilddog.com/sdk/js/2.1.2/wilddog-auth.js"></script>',
             }, {
                 text: '在index.js内添加如下代码,其中user.uid就是野狗APP认证的用户id',
-                code: 'var config = {\n\tauthDomain: "jwttest.wilddog.com"\n};\nwilddog.initializeApp(config, "DEFAULT");\n\nvar api = \'http://www.jieminuoketang.com/api/ext_getWildDogCustomToken\';\n$.get(api, function (res) {\n\twilddog.auth().signInWithCustomToken(res.data).then(function (user) {\n\t   	console.log(user);\n\t});\n}, \'jsonp\');',
+                code: 'var config = {\n\tauthDomain: "jwttest.wilddog.com"\n};\nwilddog.initializeApp(config, "DEFAULT");\n\nvar api = \'http://editor.xmgc360.com/api/ext_getWildDogCustomToken\';\n$.get(api, function (res) {\n\twilddog.auth().signInWithCustomToken(res.data).then(function (user) {\n\t   	console.log(user);\n\t});\n}, \'jsonp\');',
             }],
             links: [{
                 title: '野狗官方自定义用户认证说明',
-                url: 'https://docs.wilddog.com/guide/auth/web/custom.html'
+                url: 'http://rtapps.xmgc360.com/6256/asosqt8he41u/index.html'
                 }],
         }, {
             title: '通用第三方http接口API接口功能的使用',
             tips: [{
                 text: '首先，您需要了解第三方API的接口规范，并获得相应的AppKey密钥',
             }, {
-                text: '然后，您需要把这个密钥设定为杰米诺APP的扩展的自定义属性，如tulingkey,EXds9sd...',
+                text: '然后，您需要把这个密钥设定为你的APP的扩展的自定义属性，如tulingkey,EXds9sd...',
             }, {
                 text: '这样您就可以在js编码的时候调用www.jieminuoketang.com/api/ext_httpProxy接口，根据官方规范格式调用，密钥字段使用{{tulingke}}替换，这里tulingkey代表您的保密关键字，必须与上一步设定的APP自定义属性一致',
-                code: '\nvar api = \'http://www.jieminuoketang.com/api/ext_httpProxy\';\nvar data = {\n\topt: {\n\t\thostname: \'www.tuling123.com\',\n\t\tpath: \'/openapi/api\',\n\t\tmethod: \'POST\'\n\t},\n\t body: {\n\t\tkey: \'{{tulingkey}}\',\n\t\tinfo: $scope.ask\n\t}\n};\napi += \'?data=\' +(JSON.stringify(data));\n$.get(api, function (res) {},\'jsonp\')',
+                code: '\nvar api = \'http://editor.xmgc360.com/api/ext_httpProxy\';\nvar data = {\n\topt: {\n\t\thostname: \'www.tuling123.com\',\n\t\tpath: \'/openapi/api\',\n\t\tmethod: \'POST\'\n\t},\n\t body: {\n\t\tkey: \'{{tulingkey}}\',\n\t\tinfo: $scope.ask\n\t}\n};\napi += \'?data=\' +(JSON.stringify(data));\n$.get(api, function (res) {},\'jsonp\')',
             }],
             links: [{
                 title: '图灵机器人官方网站（需要登录注册，创建自己的机器人然后得到ApiKey）',
                 url: 'http://www.tuling123.com/'
                 }, {
                 title: '范例：基于图灵接口开发的聊天机器人（可以直接修改地址为/index.js查看js文件)',
-                url: 'http://rtfiles.jieminuoketang.com/1/au22ntesx127/index.html'
+                url: 'http://rtapps.xmgc360.com/6256/asosqt8he41u/index.html'
                 }],
         }];
         $scope.extslable = '第三方扩展(' + $scope.exts.length + ')';

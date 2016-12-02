@@ -4,12 +4,12 @@
 
 <head>
     <meta charset="utf-8">
-    <title>杰米诺课堂 | 我的APP分享页</title>
-    <meta name="description" content="入门级的App在线编辑部署工具,zhyuzh贡献">
+    <title>项目工场编辑器 | 我的APP分享页</title>
+    <meta name="description" content="入门级的App在线编辑部署工具">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-    <link rel="icon" type="image/png" href="http://files.jieminuoketang.com/1/aaw6vsns2i5k/src/JMN32B.png">
+    <link rel="icon" type="image/png" href="http://www.xmgc360.com/favicon.ico">
 
     <!--    css样式-->
     <link href="//cdn.bootcss.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
@@ -58,11 +58,11 @@
     <div class="container-fluid col-xs-12 col-sm-10 col-sm-offset-1 col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3" style="text-align:center">
         <div style="margin-top:24px;color:#AAA;font-size:14px">
             <div style='display:inline-block;height:32px;width:32px;border-radius:100px;background:#CCC;overflow:hidden;vertical-align: middle;'>
-                <img ng-show='data.user.avatar' ng-src='{{data.user.avatar?(data.user.avatar+"-avatar32"):""}}' style='height:100%' />
+                <img ng-show='data.user.avatar' ng-src='{{data.user.avatar?(data.user.avatar):""}}' style='height:100%' />
             </div>
             <span ng-bind='data.user.nick' style="color:#000" ng-show='data.user.nick'></span>
             <span>在</span>
-            <a href="http://www.jieminuoketang.com" style="color:#ec407a">杰米诺课堂</a>
+            <a href="http://editor.xmgc360.com" style="color:#ec407a">项目工场编辑器</a>
             <span>开发了一个APP</span>
         </div>
 
@@ -82,16 +82,16 @@
         </div>
 
         <div style='margin:24px 0 12px 0'>
-            <div ng-hide='hasLogin'>您还没有登录杰米诺课堂，可能无法正常体验APP的完整功能</div>
-            <div ng-click='gologin()' style='color:#ec407a;margin-top:4px' ng-hide='hasLogin'>注册或登录杰米诺课堂</div>
+            <div ng-hide='hasLogin'>您还没有项目工场，可能无法正常体验APP的完整功能</div>
+            <div ng-click='gologin()' style='color:#ec407a;margin-top:4px' ng-hide='hasLogin'>注册或登录项目工场</div>
         </div>
 
         <div style='background-color:#EEE;padding:8px'>
-            <span>如果不了解</span>
+            <span>如果不了解【</span>
             <span ng-bind='data.user.nick || "未知"'></span>
-            <span>(</span>
-            <span ng-bind='data.user.phone || "未知"'></span>
-            <span>)，请勿点击APP图标或链接</span>
+            <span>】</span>
+            <span ng-bind='data.user.phone || "未知"' ng-hide='true'></span>
+            <span>，请勿点击APP图标或链接</span>
         </div>
 
         <div style="width:256px;display:inline-block;padding:12px;">
@@ -113,11 +113,11 @@
         <div style="padding:4px 0 48px 0">
             <div style="font-size:12px;color:#666">
                 <span>本页面由</span>
-                <a href="http://www.jieminuoketang.com">杰米诺课堂</a>
+                <a href="http://www.xmgc360.com">项目工场</a>
                 <span>提供支持</span>
             </div>
             <div style="font-size:12px">
-                <a href="http://www.jieminuoketang.com">www.jieminuoketang.com</a>
+                <a href="http://www.xmgc360.com">www.xmgc360.com</a>
             </div>
         </div>
     </div>
@@ -141,22 +141,22 @@
             app: {
                 id: 332,
                 alias: "陪聊机器人小派",
-                icon: "http://files.jieminuoketang.com/Fg2RcPOzcJgU-JHrNp7pQQBcacVD",
-                desc: "利用第三利用第三方接口实现的聊天机器人案例利用第三方接口实现的聊天机器人案例利用第三方接口实现的聊天机器人案例利用第三方接口实现的聊天机器人案例利用第三方接口实现的聊天机器人案例利用第三方接口实现的聊天机器人案例利用第三方接口实现的聊天机器人案例方接口实现的聊天机器人案例",
-                url: "http://files.jieminuoketang.com/1/au22ntesx127/",
+                icon: "http://...",
+                desc: "利用第三利用第人案例",
+                url: "http://...",
             },
             like: 122,
             time: '2017-12-30 12:34:22',
             visited: 0,
         };
-                */
+        */
 
 
 
 
         //调整标题
         if ($scope.data && $scope.data.user && $scope.data.user.nick) {
-            $('head').find('title').html('杰米诺课堂 | ' + $scope.data.user.nick + '分享的APP');
+            $('head').find('title').html('项目工场在线编程 | ' + $scope.data.user.nick + '分享的APP');
         };
 
         //把url指向实时
@@ -167,7 +167,7 @@
 
         //自动检测是否已经登录，没登录的给出提示？？？
         $scope.getMyInfo = function() {
-            var api = 'http://www.jieminuoketang.com/api/acc_getMyInfo';
+            var api = 'http://editor.xmgc360.com/api/acc_getMyInfo';
             var dat = {};
 
             $.post(api, dat, function(res) {
@@ -187,7 +187,7 @@
         //获取页面点赞数和访问数
         $scope.getShareData = function() {
             //发送请求增加该地址的访问数
-            var api = 'http://www.jieminuoketang.com/api/share_getUrlData';
+            var api = 'http://editor.xmgc360.com/api/share_getUrlData';
             var dat = {};
             $.post(api, dat, function(res) {
                 console.log('POST', api, dat, res);
@@ -213,7 +213,7 @@
                 localStorage['pie_share_url_visited' + location.href] = true;
 
                 //发送请求增加该地址的访问数
-                var api = 'http://www.jieminuoketang.com/api/share_visitUrl';
+                var api = 'http://editor.xmgc360.com/api/share_visitUrl';
                 var dat = {};
                 $.post(api, dat, function(res) {
                     console.log('POST', api, dat, res);
@@ -231,7 +231,7 @@
                     localStorage['pie_share_url_liked' + location.href] = true;
 
                     //发送请求增加该地址的访问数;jsonp只能附加在地址参数data
-                    var api = 'http://www.jieminuoketang.com/api/share_likeUrl';
+                    var api = 'http://editor.xmgc360.com/api/share_likeUrl';
                     var dat = {};
                     if ($scope.data && $scope.data.app && $scope.data.app.id) {
                         dat.tarType = 'app';

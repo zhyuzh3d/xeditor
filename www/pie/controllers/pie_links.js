@@ -45,7 +45,7 @@
         };
 
         $scope.gotoProfile = function () {
-            location.href = 'http://' + location.host + '/account/?page=acc_profile';
+            location.href = _global.extUrls.profilePage;
         };
 
 
@@ -130,7 +130,7 @@
                 ['官方站点', 'https://material.angularjs.org/latest/'],
                 ['CDN页面', 'http://www.bootcdn.cn/angular-material/'],
             ],
-        },{
+        }, {
             title: 'A-frame',
             icon: ' http://files.jieminuoketang.com/1/anrl70f1l26r/src/aframe.png',
             desc: '超简单易用的WebVr虚拟现实开发制作工具，支持谷歌VR纸盒，支持Oculus、htc vivi等高端设备，像写html一样布局三维场景，功能众多的第三方components元件库，还能够直接在页面内打开类似三维软件的手工编辑工具，可谓神器',
@@ -138,14 +138,14 @@
                 ['官方站点', 'https://aframe.io/'],
                 ['CDN页面', 'http://www.bootcdn.cn/aframe/'],
             ],
-        },{
+        }, {
             title: 'Three.js',
             desc: '目前我所知的最先进的三维开发库，基于WebGL，各种高级功能不可尽数，包括动画、物理材质、灯光、特效、渲染滤镜等等。threejs是a-frame的基础，a-frame内已经包含threejs。',
             links: [
                 ['官方站点', 'https://threejs.org/'],
                 ['CDN页面', 'http://www.bootcdn.cn/three.js/'],
             ],
-        },{
+        }, {
             title: 'Humaninput',
             desc: '人体工程学输入事件控制，一款小众化使用的插件，包含跨浏览器版本的改进了的键盘鼠标、和触控输入，重要的是同时它包含了实时语音命令识别（类似于google now）服务。语音识别只限在chrome浏览器（firefox修改设定后可用）',
             links: [
@@ -153,7 +153,7 @@
             ],
         }, {
             title: 'Artyom',
-            icon:'http://files.jieminuoketang.com/1/anrl70f1l26r/src/artyom.png',
+            icon: 'http://files.jieminuoketang.com/1/anrl70f1l26r/src/artyom.png',
             desc: '单独的语音识别插件，如果你觉得humaninput只会听不会说，那么这个就是你需要的。语音识别只限在chrome浏览器（firefox修改设定后可用）',
             links: [
                 ['官方站点（Github）', 'https://sdkcarlos.github.io/sites/artyom.html'],
